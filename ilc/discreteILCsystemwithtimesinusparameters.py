@@ -18,13 +18,23 @@ T_length=200
 batch=20
 def state_update(t, x, u, params):
     # Parameter setup
+    #pdb.set_trace()
+    #sigma1=0.2*(-1.+2.*np.random.random())
+    #sigma2 =0.2*(-1.+2.*np.random.random())
+    #sigma3 = 0.2*(-1.+2.*np.random.random())
+    #sigma4 = 0.2*(-1.+2.*np.random.random())
+    sigma1=0.5*np.sin(0.1*t)
+    sigma2 =0.5*np.sin(0.1*t)
+    sigma3 = 0.5*np.sin(0.1*t)
+    sigma4 = 0.5*np.sin(0.1*t)
 
+    #pdb.set_trace()
     # Map the states into local variable names
     z1 = np.array([x[0]])
     z2 = np.array([x[1]])
     z3 = np.array([x[2]])
     # Compute the discrete updates
-    dz1=1.607*z1-0.6086*z2-0.9282*z3+1.239*u
+    dz1=(1.607+0.0804*sigma1)*z1-(0.6086+0.0304*sigma2)*z2-(0.9282+0.0464*sigma3)*z3+(1.239+0.062*sigma4)*u
     dz2=z1
     dz3 = u
     #pdb.set_trace()
@@ -86,6 +96,9 @@ for batch_index in range(batch):
     for item in range(T_length):
         #if item ==0:
         #pdb.set_trace()
+        # set the continuous sample time
+        T[0] = item
+        T[1] = item + 1
         tem_x=x_k[0]-x_k_last[item]  # 上一个批次应该是0
         tem_y=y_ref[item]-y_k_last[item]
         x_2d=np.block([[tem_x,tem_y]])
@@ -145,9 +158,10 @@ ax.set_xlabel(xlable,font2)
 ax.set_ylabel(ylable,font2)
 #ax.set_zlabel(zlable,font2)
 ax.legend(['y_Ref','y_out'])
+#ax.view_init(52, -16)
+#plt.savefig('3DOut.png',dpi=700)
 ax.view_init(40, -19)
-plt.savefig('discrete_out.png',dpi=700)
-
+#plt.savefig('discrete_random_out.png',dpi=700)
 plt.show()
 #2. control signal
 fig_control=plt.figure()
@@ -162,7 +176,7 @@ for item2 in range(batch):
 ax.set_xlabel(xlable,font2)
 ax.set_ylabel(ylable,font2)
 ax.view_init(40, -19)
-plt.savefig('discrete_input.png',dpi=700)
+#plt.savefig('discrete_random_input.png',dpi=700)
 plt.show()
 #3.SAE
 SAE=np.zeros(batch)
@@ -187,7 +201,7 @@ plt.xlabel(xlable,font2 )
 plt.ylabel(ylable,font2 )
 #plt.legend(['SAC-based 2D feedback Controller','P-ILC Controller'])
 #plt.savefig('SAEforRMES.png',dpi=600)
-plt.savefig('discrete_RMES.png',dpi=700)
+#plt.savefig('discrete_random_RMES.png',dpi=700)
 plt.show()
 pdb.set_trace()
 a=2

@@ -18,13 +18,23 @@ T_length=200
 batch=20
 def state_update(t, x, u, params):
     # Parameter setup
+    #pdb.set_trace()
+    #sigma1=0.2*(-1.+2.*np.random.random())
+    #sigma2 =0.2*(-1.+2.*np.random.random())
+    #sigma3 = 0.2*(-1.+2.*np.random.random())
+    #sigma4 = 0.2*(-1.+2.*np.random.random())
+    sigma1=0.
+    sigma2 =0.
+    sigma3 = 0.
+    sigma4 = 0.
 
+    #pdb.set_trace()
     # Map the states into local variable names
     z1 = np.array([x[0]])
     z2 = np.array([x[1]])
     z3 = np.array([x[2]])
     # Compute the discrete updates
-    dz1=1.607*z1-0.6086*z2-0.9282*z3+1.239*u
+    dz1=(1.607+0.0804*sigma1)*z1-(0.6086+0.0304*sigma2)*z2-(0.9282+0.0464*sigma3)*z3+(1.239+0.062*sigma4)*u
     dz2=z1
     dz3 = u
     #pdb.set_trace()
@@ -43,7 +53,7 @@ io_nonlinearsystem = control.NonlinearIOSystem(
 #pdb.set_trace()
 #X0 = [0.0, 0.0,0.0]
 X0 = np.array((0.0,0.0,0.0))
-T = np.array((0.0,1))
+T = np.array((0.0,1.))
 #T=np.linspace(0, 3.5,36)
 input=np.array((1.,1.))
 #pdb.set_trace()
@@ -78,44 +88,43 @@ u_data=[]
 #t, y,x = control.input_output_response(io_nonlinearsystem, T, input, X0,return_x=True)
 #t, y = control.input_output_response(io_nonlinearsystem, T, 1, X0)
 
+for item in range(T_length):
+    #if item ==0:
+    #pdb.set_trace()
+    tem_x=x_k[0]-x_k_last[item]  # 上一个批次应该是0
+    tem_y=y_ref[item]-y_k_last[item]
+    x_2d=np.block([[tem_x,tem_y]])
+    #pdb.set_trace()
+    r_k[0][0]=K@x_2d.T
+    u_k[0][0]=u_k_last[item][0]+r_k[0][0]
+    input[0]=u_k[0][0]
+    input[1] = u_k[0][0]
+    #pdb.set_trace()
+    t_step, y_step, x_step = control.input_output_response(io_nonlinearsystem, T, input, X0=X0, return_x=True)
+    #pdb.set_trace()
+    # change the initial state
+    X0[0] = x_step[0][1]
+    X0[1] = x_step[1][1]
+    X0[2] = x_step[2][1]
+    # save the data into the memory
+    u_k_last[item][0]=u_k[0][0]
+    y_k_last[item]=y_step[1]
+    #pdb.set_trace()
+    for item1 in range(m):
+        x_k_current[(item+1)][item1]=x_step[item1][1]
+        x_k[0][item1]=x_step[item1][1]   #change the current information
+    #x_k_last[item]=x_step[1]
+    #print(y_step[1])
+    #pdb.set_trace()
+x_k_last=copy.deepcopy(x_k_current)
+with open('./fixed.csv', 'w', encoding='UTF8', newline='') as f:
+    writer = csv.writer(f)
 
-for batch_index in range(batch):
-    x_k=np.zeros((1,m))
-    X0 = np.array((0.0, 0.0, 0.0))
-    #pdb.set_trace()
-    for item in range(T_length):
-        #if item ==0:
-        #pdb.set_trace()
-        tem_x=x_k[0]-x_k_last[item]  # 上一个批次应该是0
-        tem_y=y_ref[item]-y_k_last[item]
-        x_2d=np.block([[tem_x,tem_y]])
-        #pdb.set_trace()
-        r_k[0][0]=K@x_2d.T
-        u_k[0][0]=u_k_last[item][0]+r_k[0][0]
-        input[0]=u_k[0][0]
-        input[1] = u_k[0][0]
-        #pdb.set_trace()
-        t_step, y_step, x_step = control.input_output_response(io_nonlinearsystem, T, input, X0=X0, return_x=True)
-        #pdb.set_trace()
-        # change the initial state
-        X0[0] = x_step[0][1]
-        X0[1] = x_step[1][1]
-        X0[2] = x_step[2][1]
-        # save the data into the memory
-        u_k_last[item][0]=u_k[0][0]
-        y_k_last[item]=y_step[1]
-        #pdb.set_trace()
-        for item1 in range(m):
-            x_k_current[(item+1)][item1]=x_step[item1][1]
-            x_k[0][item1]=x_step[item1][1]   #change the current information
-        #x_k_last[item]=x_step[1]
-        #print(y_step[1])
-        #pdb.set_trace()
-    x_k_last=copy.deepcopy(x_k_current)
-    #pdb.set_trace()
-    #deep copy
-    y_data.append(copy.deepcopy(y_k_last))
-    u_data.append(copy.deepcopy(u_k_last))
+    # write multiple rows
+
+    writer.writerows(map(lambda x: [x], y_k_last))
+#pdb.set_trace()
+"""   
 #pdb.set_trace()
 # Plot the 3d visibale figure
 #1.response
@@ -145,9 +154,10 @@ ax.set_xlabel(xlable,font2)
 ax.set_ylabel(ylable,font2)
 #ax.set_zlabel(zlable,font2)
 ax.legend(['y_Ref','y_out'])
+#ax.view_init(52, -16)
+#plt.savefig('3DOut.png',dpi=700)
 ax.view_init(40, -19)
-plt.savefig('discrete_out.png',dpi=700)
-
+plt.savefig('discrete_random_out.png',dpi=700)
 plt.show()
 #2. control signal
 fig_control=plt.figure()
@@ -162,7 +172,7 @@ for item2 in range(batch):
 ax.set_xlabel(xlable,font2)
 ax.set_ylabel(ylable,font2)
 ax.view_init(40, -19)
-plt.savefig('discrete_input.png',dpi=700)
+plt.savefig('discrete_random_input.png',dpi=700)
 plt.show()
 #3.SAE
 SAE=np.zeros(batch)
@@ -187,7 +197,8 @@ plt.xlabel(xlable,font2 )
 plt.ylabel(ylable,font2 )
 #plt.legend(['SAC-based 2D feedback Controller','P-ILC Controller'])
 #plt.savefig('SAEforRMES.png',dpi=600)
-plt.savefig('discrete_RMES.png',dpi=700)
+plt.savefig('discrete_random_RMES.png',dpi=700)
 plt.show()
+"""
 pdb.set_trace()
 a=2

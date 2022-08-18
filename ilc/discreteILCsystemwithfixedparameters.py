@@ -147,7 +147,8 @@ ax.set_ylabel(ylable,font2)
 ax.legend(['y_Ref','y_out'])
 #ax.view_init(52, -16)
 #plt.savefig('3DOut.png',dpi=700)
-
+ax.view_init(40, -19)
+plt.savefig('discrete_fix_out.png',dpi=700)
 plt.show()
 #2. control signal
 fig_control=plt.figure()
@@ -161,6 +162,8 @@ for item2 in range(batch):
 
 ax.set_xlabel(xlable,font2)
 ax.set_ylabel(ylable,font2)
+ax.view_init(40, -19)
+plt.savefig('discrete_fix_input.png',dpi=700)
 plt.show()
 #3.SAE
 SAE=np.zeros(batch)
@@ -185,6 +188,7 @@ plt.xlabel(xlable,font2 )
 plt.ylabel(ylable,font2 )
 #plt.legend(['SAC-based 2D feedback Controller','P-ILC Controller'])
 #plt.savefig('SAEforRMES.png',dpi=600)
+plt.savefig('discrete_fix_RMES.png',dpi=700)
 plt.show()
 pdb.set_trace()
 a=2
