@@ -116,7 +116,7 @@ for batch_index in range(batch):
     #deep copy
     y_data.append(copy.deepcopy(y_k_last))
     u_data.append(copy.deepcopy(u_k_last))
-#pdb.set_trace()
+pdb.set_trace()
 # Plot the 3d visibale figure
 #1.response
 fig=plt.figure()
