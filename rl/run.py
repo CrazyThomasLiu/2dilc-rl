@@ -66,7 +66,7 @@ class Arguments:
         torch.manual_seed(self.random_seed)
         torch.set_num_threads(self.thread_num)
         torch.set_default_dtype(torch.float32)
-
+        #pdb.set_trace()
         os.environ['CUDA_VISIBLE_DEVICES'] = str(self.visible_gpu)
 
         '''env'''
@@ -90,6 +90,8 @@ class Arguments:
                                f'\n| self.agent.if_on_policy: {self.agent.if_on_policy}')
 
         '''cwd'''
+        #pdb.set_trace()
+        """path for the saving files"""
         if self.cwd is None:
             agent_name = self.agent.__class__.__name__
             env_name = getattr(self.env, 'env_name', self.env)
@@ -118,9 +120,10 @@ def train_and_evaluate(args, agent_id=0):
     agent.save_or_load_agent(args.cwd, if_save=False)
     #pdb.set_trace()
     """
-    Jianan Liu
+    Jianan Liu     
     give the path for evaluator
     """
+    # ??? change to self.cwd
     current_path = os.path.abspath(__file__)
     current_dir = os.path.dirname(current_path)
     #current_dir=os.path.join(current_dir, "runs")
@@ -141,6 +144,7 @@ def train_and_evaluate(args, agent_id=0):
     fp.write(yaml.dump(args.__dict__))
     fp.close()
     '''init Evaluator'''
+    #pdb.set_trace()
     eval_env = build_env(env) if args.eval_env is None else args.eval_env
     evaluator = Evaluator(args.cwd, agent_id, agent.device, eval_env,
                           args.eval_gap, args.eval_times1, args.eval_times2,distance_path )
@@ -226,8 +230,8 @@ def train_and_evaluate(args, agent_id=0):
     '''init ReplayBuffer after training start'''
     agent.states = [env.reset(), ] #????? 导致 batch 增加
     #pdb.set_trace()
-    pdb.set_trace()
     if not agent.if_on_policy:
+        #pdb.set_trace()
         if_load = buffer.save_or_load_history(cwd, if_save=False)
 
         if not if_load:
@@ -253,34 +257,9 @@ def train_and_evaluate(args, agent_id=0):
         with torch.no_grad():
             #pdb.set_trace()
             #temp = evaluator.evaluate_and_save(agent.act, steps, r_exp, logging_tuple)
-            temp = evaluator.evaluate_and_save(agent.act, steps, r_exp, logging_tuple , agent.cri_scheduler, agent.act_scheduler)
+            #temp = evaluator.evaluate_and_save(agent.act, steps, r_exp, logging_tuple , agent.cri_scheduler, agent.act_scheduler)
+            temp = evaluator.evaluate_and_save_liu(agent.act, steps, r_exp, logging_tuple , agent.cri_scheduler, agent.act_scheduler)
             #########################################################################
-            """
-            state = env.reset()
-            y_out=[]
-            y_ref=[]
-            t=range(180)
-            for episode_step in range(180):
-                #pdb.set_trace()
-                s_tensor = torch.as_tensor((state,), dtype=torch.float32, device=agent.device)
-                # pdb.set_trace()
-                a_tensor = agent.act(s_tensor)
-                action = a_tensor.detach().cpu().numpy()[0]  # not need detach(), because with torch.no_grad() outside
-                # pdb.set_trace()
-                state, reward, done, _ = env.step(action)
-                y_out.append(state[2]-state[0])
-                y_ref.append(state[2])
-                if done:
-                    break
-            state = env.reset()
-            plt.figure(1)
-            plt.plot(t, y_ref, '--', color='red')
-            plt.plot(t, y_out, ':')
-            plt.grid()
-            #plt.savefig('Result.png')
-            plt.show()
-            pdb.set_trace()
-            """
             #########################################################################
             if_reach_goal, if_save = temp
             #pdb.set_trace()
@@ -310,16 +289,20 @@ def explore_before_training(env, target_step):  # for off-policy only
             next_s, reward, done, _ = env.step(action)
             other = (reward, done, action)
         else:
+            """Jianan Liu
+            """
+
             action = rd.uniform(-1, 1, size=action_dim)
+            #action = rd.uniform(-0.1, 0.1, size=action_dim)
             #pdb.set_trace()
             next_s, reward, done, _ = env.step(action)
             other = (reward, done, *action)
 
         trajectory.append((state, other))
         state = env.reset() if done else next_s
-
+        #pdb.set_trace()
         step += 1
-        if done and step > target_step:
+        if done and step > target_step: # ????? one episode?
             #pdb.set_trace()
             break
     return trajectory

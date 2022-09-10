@@ -214,6 +214,42 @@ class Evaluator:
             #self.draw_plot()
         return if_reach_goal, if_save
 
+    def evaluate_and_save_liu(self, act, steps, r_exp, log_tuple, cri_scheduler, act_scheduler) -> (bool, bool):  # 2021-09-09
+        self.total_step += steps  # update total training steps
+        """"""
+
+        self.writer.add_scalar('episodemeanReward', r_exp, self.total_step)
+        '''save the policy network'''
+        if_save = r_exp > self.r_max
+        if if_save:  # save checkpoint with highest episode return
+            self.r_max = r_exp  # update max reward (episode return)
+            # act_save_path = f'{self.cwd}/actor.pth'
+            #pdb.set_trace()
+            act_save_path = f'{self.distance_path}/actor.pth'
+            torch.save(act.state_dict(), act_save_path)  # save policy network in *.pth
+            # pdb.set_trace()
+            print(f"{self.agent_id:<3}{self.total_step:8.2e}{self.r_max:8.2f} |")  # save policy and print
+            # pdb.set_trace()
+        #self.recorder.append((self.total_step, r_avg, r_std, r_exp, *log_tuple))  # update recorder
+        '''print some information to Terminal'''
+        # pdb.set_trace()
+        if_reach_goal = bool(self.r_max > self.target_return)  # check if_reach_goal
+        """
+        if if_reach_goal and self.used_time is None:
+            self.used_time = int(time.time() - self.start_time)
+            print(f"{'ID':<3}{'Step':>8}{'TargetR':>8} |"
+                  f"{'avgR':>8}{'stdR':>7}{'avgS':>7}{'stdS':>6} |"
+                  f"{'UsedTime':>8}  ########\n"
+                  f"{self.agent_id:<3}{self.total_step:8.2e}{self.target_return:8.2f} |"
+                  f"{r_avg:8.2f}{r_std:7.1f}{s_avg:7.0f}{s_std:6.0f} |"
+                  f"{self.used_time:>8}  ########")
+        # pdb.set_trace()
+        print(f"{self.agent_id:<3}{self.total_step:8.2e}{self.r_max:8.2f} |"
+              f"{r_avg:8.2f}{r_std:7.1f}{s_avg:7.0f}{s_std:6.0f} |"
+              f"{r_exp:8.2f}{''.join(f'{n:7.2f}' for n in log_tuple)}")
+        """
+
+        return if_reach_goal, if_save
     @staticmethod
     def get_r_avg_std_s_avg_std(rewards_steps_list):
         rewards_steps_ary = np.array(rewards_steps_list, dtype=np.float32)
@@ -225,6 +261,7 @@ class Evaluator:
         if if_save:
             np.save(self.recorder_path, self.recorder)
         elif os.path.exists(self.recorder_path):
+            #pdb.set_trace()
             recorder = np.load(self.recorder_path)
             self.recorder = [tuple(i) for i in recorder]  # convert numpy to list
             self.total_step = self.recorder[-1][0]

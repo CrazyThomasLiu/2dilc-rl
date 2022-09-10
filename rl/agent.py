@@ -106,7 +106,7 @@ class AgentBase:
         """
         traj = list()
         #pdb.set_trace()
-        state = self.states[0]
+        state = self.states[0] # ??????define the initial  state
         #pdb.set_trace()
         for _ in range(target_step):
             action = self.select_actions((state,))[0]
@@ -609,7 +609,7 @@ class AgentSAC(AgentBase):
 
             next_a, next_log_prob = self.act_target.get_action_logprob(next_s)  # stochastic policy
             next_q = torch.min(*self.cri_target.get_q1_q2(next_s, next_a))  # twin critics
-            pdb.set_trace()
+            #pdb.set_trace()
             q_label = reward + mask * (next_q + next_log_prob * alpha)
         q1, q2 = self.cri.get_q1_q2(state, action)
         obj_critic = self.criterion(q1, q_label) + self.criterion(q2, q_label)
@@ -650,7 +650,7 @@ class AgentModSAC(AgentSAC):  # Modified SAC using reliable_lambda and TTUR (Two
 
             '''objective of critic (loss function of critic)'''
             obj_critic, state = self.get_obj_critic(buffer, batch_size, alpha)
-            pdb.set_trace()
+            #pdb.set_trace()
             self.obj_critic = 0.995 * self.obj_critic + 0.0025 * obj_critic.item()  # for reliable_lambda
             """jianan liu"""
             #pdb.set_trace()

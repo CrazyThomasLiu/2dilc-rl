@@ -34,7 +34,7 @@ class ReplayBuffer:
 
         other_dim = 1 + 1 + self.action_dim
         self.buf_other = torch.empty((max_len, other_dim), dtype=torch.float32, device=self.device)
-
+        #pdb.set_trace()
         if isinstance(state_dim, int):  # state is pixel
             self.buf_state = torch.empty((max_len, state_dim), dtype=torch.float32, device=self.device)
         elif isinstance(state_dim, tuple):

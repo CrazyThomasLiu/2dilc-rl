@@ -183,6 +183,13 @@ for batch_index_2d in range(batch):
     for time in range(T_length):
         SAE[batch_index_2d] += (abs(y_out_time[time] - y_ref[time])) ** 2
     SAE[batch_index_2d] = math.sqrt(SAE[batch_index_2d] / T_length)
+"""save the sqrt to the csv"""
+with open('./bathsinus.csv', 'w', encoding='UTF8', newline='') as f:
+    writer = csv.writer(f)
+
+    # write multiple rows
+
+    writer.writerows(map(lambda x: [x], SAE))
 plt.figure()
 batch_time=range(batch)
 x_major_locator=MultipleLocator(1)
