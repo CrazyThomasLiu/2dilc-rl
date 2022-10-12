@@ -30,6 +30,7 @@ class BatchSysEnv:
         # define the 2DILC Controller
         self.K = np.array([[-1.4083788, 0.57543156, 0.87756631, 0.71898388]])
         self.x_k = np.zeros((1, self.m))
+        'only the state need a additional time length to cal the initial ilc control'
         self.x_k_last = np.zeros((T_length + 1, self.m))
         self.x_k_current = np.zeros((T_length + 1, self.m))
         self.y_k_last = np.zeros((T_length, self.l))
@@ -45,12 +46,14 @@ class BatchSysEnv:
         self.input_signal = np.array((0., 0.))
         #pdb.set_trace()
         # give the first 2D ILC control signal
-        self.cal_2DILCcontroller()
+        #self.cal_2DILCcontroller()
 
         # reward function weight
         self.A=-10.
         # define the history information about the RL control signal
         self.u_rl_k_last = np.zeros((self.T_length, self.n))
+        # give the first 2D ILC control signal
+        self.cal_2DILCcontroller()
         # environment information
         self.env_name="2D-ILC_RL"
         #self.state_dim=3
@@ -79,6 +82,7 @@ class BatchSysEnv:
         self.x_k_last = copy.deepcopy(self.x_k_current)
         #self.batch_num+=1 # +1  ???
         # give the first 2D ILC control signal
+        #pdb.set_trace()
         self.cal_2DILCcontroller()
         # the state space
         #pdb.set_trace()
@@ -216,7 +220,23 @@ class BatchSysEnv:
         self.r_k[0]=self.K@self.x_2d.T
         self.u_k[0]= self.u_k_last[self.time]+ self.r_k[0]
 
+    """
+    #TODO: change
+    def cal_2DILCcontroller(self):
+        # cal the initial 2D system state matrix
+        #pdb.set_trace()
+        # Todo : ???
+        tem_x=self.x_k[0]-self.x_k_last[self.time]  # 上一个批次应该是0
+        tem_y=self.y_ref[self.time]-self.y_k_last[self.time]
+        self.x_2d=np.block([[tem_x,tem_y]])
+        #pdb.set_trace()
+        #cal the control signal of the 2D ILC
+        self.r_k[0]=self.K@self.x_2d.T
+        #pdb.set_trace()
+        #self.u_k[0] = self.u_k_last[self.time] + self.r_k[0]
+        self.u_k[0]= self.u_k_last[self.time]+ self.r_k[0]+self.u_rl_k_last[self.time]
 
+    """
 
 
 

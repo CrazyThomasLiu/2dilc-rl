@@ -25,6 +25,13 @@ def state_update(t, x, u, params):
     sigma2 =0.5*np.sin(batch_num * 2 * np.pi / 10)
     sigma3 = 0.5*np.sin(batch_num * 2 * np.pi / 10)
     sigma4 = 0.5*np.sin(batch_num * 2 * np.pi / 10)
+    """
+    sigma1=0.5*np.sin(batch_num * 2 * np.pi / 20)
+    sigma2 =0.5*np.sin(batch_num * 2 * np.pi / 20)
+    sigma3 = 0.5*np.sin(batch_num * 2 * np.pi / 20)
+    sigma4 = 0.5*np.sin(batch_num * 2 * np.pi / 20)
+    """
+
 
     #pdb.set_trace()
     # Map the states into local variable names
@@ -80,7 +87,7 @@ u_k_last=np.zeros((T_length,n))
 y_data=[]
 u_data=[]
 
-
+u_ilc_time_transction=[]
 # Simulate the system
 #t, y,x = control.input_output_response(io_nonlinearsystem, T, input, X0,return_x=True)
 #t, y = control.input_output_response(io_nonlinearsystem, T, 1, X0)
@@ -115,6 +122,8 @@ for batch_index in range(batch):
         u_k_last[item][0]=u_k[0][0]
         y_k_last[item]=y_step[1]
         #pdb.set_trace()
+        if item == 50:
+            u_ilc_time_transction.append(u_k[0][0])
         for item1 in range(m):
             x_k_current[(item+1)][item1]=x_step[item1][1]
             x_k[0][item1]=x_step[item1][1]   #change the current information
@@ -127,6 +136,23 @@ for batch_index in range(batch):
     y_data.append(copy.deepcopy(y_k_last))
     u_data.append(copy.deepcopy(u_k_last))
 #pdb.set_trace()
+############################
+t=range(batch)
+plt.figure()
+
+#plt.plot(t,action_s,linewidth=3)
+#pdb.set_trace()
+
+plt.plot(t, u_ilc_time_transction, linewidth=2)
+#xlable = 'Time:t '
+#ylable = 'Control Signal:$u_{k}(t)$'
+#plt.xlabel(xlable,font2 )
+#plt.ylabel(ylable,font2 )
+#plt.legend(['rl','ilc'])
+#plt.legend(['k=1','k=2','k=3','k=4','k=5'])
+#plt.savefig('action.png',dpi=600)
+plt.show()
+############################3333
 # Plot the 3d visibale figure
 #1.response
 fig=plt.figure()
@@ -158,7 +184,7 @@ ax.legend(['y_Ref','y_out'])
 #ax.view_init(52, -16)
 #plt.savefig('3DOut.png',dpi=700)
 ax.view_init(40, -19)
-plt.savefig('discrete_batch_out.png',dpi=700)
+#plt.savefig('discrete_batch_out.png',dpi=700)
 plt.show()
 #2. control signal
 fig_control=plt.figure()
@@ -173,7 +199,7 @@ for item2 in range(batch):
 ax.set_xlabel(xlable,font2)
 ax.set_ylabel(ylable,font2)
 ax.view_init(40, -19)
-plt.savefig('discrete_batch_input.png',dpi=700)
+#plt.savefig('discrete_batch_input.png',dpi=700)
 plt.show()
 #3.SAE
 SAE=np.zeros(batch)
@@ -184,12 +210,14 @@ for batch_index_2d in range(batch):
         SAE[batch_index_2d] += (abs(y_out_time[time] - y_ref[time])) ** 2
     SAE[batch_index_2d] = math.sqrt(SAE[batch_index_2d] / T_length)
 """save the sqrt to the csv"""
+"""
 with open('./bathsinus.csv', 'w', encoding='UTF8', newline='') as f:
     writer = csv.writer(f)
 
     # write multiple rows
 
     writer.writerows(map(lambda x: [x], SAE))
+"""
 plt.figure()
 batch_time=range(batch)
 x_major_locator=MultipleLocator(1)
@@ -205,7 +233,7 @@ plt.xlabel(xlable,font2 )
 plt.ylabel(ylable,font2 )
 #plt.legend(['SAC-based 2D feedback Controller','P-ILC Controller'])
 #plt.savefig('SAEforRMES.png',dpi=600)
-plt.savefig('discrete_batch_RMES.png',dpi=700)
+#plt.savefig('discrete_batch_RMES.png',dpi=700)
 plt.show()
 pdb.set_trace()
 a=2

@@ -150,7 +150,7 @@ ax.legend(['y_Ref','y_out'])
 #ax.view_init(52, -16)
 #plt.savefig('3DOut.png',dpi=700)
 ax.view_init(40, -19)
-plt.savefig('batch_out_action10.png',dpi=700)
+#plt.savefig('batch_out_action10.png',dpi=700)
 plt.show()
 #pdb.set_trace()
 #2. RL control signal
@@ -166,7 +166,7 @@ for item2 in range(batch):
 ax.set_xlabel(xlable,font2)
 ax.set_ylabel(ylable,font2)
 ax.view_init(40, -19)
-plt.savefig('batch_inputrl_action10.png',dpi=700)
+#plt.savefig('batch_inputrl_action10.png',dpi=700)
 plt.show()
 #pdb.set_trace()
 
@@ -183,7 +183,7 @@ for item2 in range(batch):
 ax.set_xlabel(xlable,font2)
 ax.set_ylabel(ylable,font2)
 ax.view_init(40, -19)
-plt.savefig('batch_inputilc_action10.png',dpi=700)
+#plt.savefig('batch_inputilc_action10.png',dpi=700)
 plt.show()
 #pdb.set_trace()
 
@@ -227,7 +227,7 @@ ylable = 'Root Mean Squared Error (RMSE)'
 plt.xlabel(xlable,font2 )
 plt.ylabel(ylable,font2 )
 plt.legend(['2DILC_RL','2DILC'])
-plt.savefig('batch_RMES_action10.png',dpi=700)
+#plt.savefig('batch_RMES_action10.png',dpi=700)
 plt.show()
 
 

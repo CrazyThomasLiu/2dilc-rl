@@ -127,7 +127,9 @@ def train_and_evaluate(args, agent_id=0):
     current_path = os.path.abspath(__file__)
     current_dir = os.path.dirname(current_path)
     #current_dir=os.path.join(current_dir, "runs")
-    current_dir = os.path.join(current_dir, "runs2")
+    #current_dir = os.path.join(current_dir, "runs2")
+    #current_dir = os.path.join(current_dir, "runs2_ilcinrl")
+    current_dir = os.path.join(current_dir, "runs2_ilcinrl_timebatch_sinus")
     #current_dir = os.path.join(current_dir, "runs3")
     number = 1
     distance_path = os.path.join(current_dir, "AgentModSAC_Linearsys_SISO_Step_{number}".format(number=number))
