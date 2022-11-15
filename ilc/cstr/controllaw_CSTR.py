@@ -1,32 +1,34 @@
 import numpy as np
 import cvxpy as cp
 import pdb
-m=3
-n=1
+import math
+m=2  # dimension of the state
+n=1  # input
 r=1# No useful
-l=1
+l=1   # output
 
 # the known system parameters
 #A = np.random.randn(m, m)
-A=np.array([[1.607,-0.6086,-0.9282],[1,0,0],[0,0,0]])
+A=np.array([[0.99004286,-4.13640805*math.pow(10,-7)],[-1.39476226*math.pow(10,-3),0.989967108]])
 
 #B=np.random.randn(m, n)
-B=np.array([[1.239],[0],[1]])
+B=np.array([[9.95013126*math.pow(10,-3)],[-6.99722139*math.pow(10,-6)]])
 
 #C=np.random.randn(l,m)
-C=np.array([[1,0,0]])
+C=np.array([[1.,0.]])
 
 #D=np.random.randn(m,r)
 D=np.zeros((m,r))
 
 #E1=np.random.randn(m,m)
-E1=np.array([[0.0804,-0.0304,-0.0464],[0,0,0],[0,0,0]])
-
+#E1=np.array([[0.0,0.0],[0,0]])
+E1=np.array([[1.0,1.0],[1.0,1.0]])
 #F1=np.random.randn(m,m)
 F1=np.eye(m)
 
 #E2=np.random.randn(m,n)
-E2=np.array([[0.062],[0],[0]])
+#E2=np.array([[0.0],[0.0]])
+E2=np.array([[1.0],[1.0]])
 F2=np.eye(n)
 
 #pdb.set_trace()
@@ -82,8 +84,69 @@ constraints += [inequalitymatrix << 0]
 #define the problem
 prob=cp.Problem(cp.Minimize(gamma),constraints)
 #sovle the inequality matrix
-#prob.solve(verbose=True)
+#prob.solve(solver=cp.SCS,verbose=True)
+#prob.solve(verbose=True,max_iter=20000)
+prob.solve(verbose=True)
+#prob.solve(solver=cp.OSQP)
+#prob.solve(solver=cp.ECOS)
+"""
+prob.solve()
+print("optimal value with defaut:", prob.value)
 prob.solve(solver=cp.CVXOPT)
+print("optimal value with CVXOPT:", prob.value)
+prob.solve(solver=cp.SCS)
+print("optimal value with SCS:", prob.value)
+"""
+#prob.solve(verbose=True,solver=cp.CVXOPT)
+#prob.solve(verbose=True,solver=cp.Dqcp2Dcp)
+#print("optimal value with CVXOPT:", prob.value)
+#prob.solve(solver=cp.SCIPY, scipy_options={"method": "highs"})
+#print("optimal value with SciPy/HiGHS:", prob.value)
+# Solve with GLOP.
+#prob.solve(solver=cp.GLOP)
+#print("optimal value with GLOP:", prob.value)
+
+# Solve with GLPK.
+#prob.solve(solver=cp.GLPK)
+#print("optimal value with GLPK:", prob.value)
+
+# Solve with GLPK_MI.
+#prob.solve(solver=cp.GLPK_MI)
+#print("optimal value with GLPK_MI:", prob.value)
+
+# Solve with GUROBI.
+#prob.solve(solver=cp.GUROBI)
+#print("optimal value with GUROBI:", prob.value)
+
+# Solve with MOSEK.
+#prob.solve(solver=cp.MOSEK)
+#print("optimal value with MOSEK:", prob.value)
+
+# Solve with CBC.
+#prob.solve(solver=cp.CBC)
+#print("optimal value with CBC:", prob.value)
+
+# Solve with CPLEX.
+#prob.solve(solver=cp.CPLEX)
+#print("optimal value with CPLEX:", prob.value)
+
+# Solve with NAG.
+#prob.solve(solver=cp.NAG)
+#print("optimal value with NAG:", prob.value)
+
+# Solve with PDLP.
+#prob.solve(solver=cp.PDLP)
+#print("optimal value with PDLP:", prob.value)
+
+# Solve with SCIP.
+#prob.solve(solver=cp.SCIP)
+#print("optimal value with SCIP:", prob.value)
+
+# Solve with XPRESS.
+#prob.solve(solver=cp.XPRESS)
+#print("optimal value with XPRESS:", prob.value)
+
+pdb.set_trace()
 K=M.value@(np.linalg.inv(Q.value))
 pdb.set_trace()
 a=2
