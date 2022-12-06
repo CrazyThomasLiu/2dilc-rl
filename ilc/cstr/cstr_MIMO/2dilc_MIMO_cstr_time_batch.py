@@ -20,8 +20,11 @@ l=2   # output
 T_length=200
 #T_length=300
 batch=40
-save_figure=True
-
+save_figure=False
+# the equilibrium point
+x_qp=np.array([[0.57336624],[395.3267527]])
+u_qp=np.array([[1.],[0.]])
+#pdb.set_trace()
 def state_update(t, x, u, params):
     batch_num = params.get('batch_num', 0)
     # Map the states into local variable names
@@ -86,14 +89,13 @@ x_2d=np.zeros((1,l+m))
 K=np.array([[-153.85851789,-63.47479029,39.07891756,39.07647162]
                ,[-79.97401402,-153.08904682,5.98394417,6.03835231]])
 
-
-#r_k=np.zeros((1,n))
-#u_k=np.zeros((1,n))
+"u_k = delta_u_k + equilibrium point u"
 r_k=np.zeros((n,1))
 u_k=np.zeros((n,1))
-#u_k_last=np.zeros((T_length,n))
-#u_k_last=np.zeros((n,T_length))
 u_k_last=np.zeros((T_length,n))
+
+delta_u_k=np.zeros((n,1))
+delta_u_k_last=np.zeros((T_length,n))
 #pdb.set_trace()
 #define the output data
 y_data=[]
@@ -118,12 +120,11 @@ for batch_index in range(batch):
         x_2d=np.block([[tem_x,tem_y]])
         #pdb.set_trace()
         r_k=K@x_2d.T
-        #u_k=u_k_last[:,item]+r_k
-        #u_k[0,0] = u_k_last[0,item] + r_k[0,0]
-        u_k[0, 0] = u_k_last[item,0] + r_k[0, 0]
-        #u_k[1, 0] = u_k_last[1, item] + r_k[1, 0]
-        u_k[1, 0] = u_k_last[item,1] + r_k[1, 0]
-
+        delta_u_k[0, 0] = delta_u_k_last[item,0] + r_k[0, 0]
+        delta_u_k[1, 0] = delta_u_k_last[item,1] + r_k[1, 0]
+        u_k[0, 0] =  delta_u_k[0, 0] + u_qp[0,0]
+        u_k[1, 0] =  delta_u_k[1, 0]+ u_qp[1,0]
+        #pdb.set_trace()
         # constained the input
 
         if u_k[0,0]>10:
@@ -131,22 +132,14 @@ for batch_index in range(batch):
         elif u_k[0,0]<0:
             u_k[0,0]=0
 
-
-
         # input 2 is the cooling so only negative
-        """
-        if abs(u_k[1, 0]) > 20:
-            if u_k[1, 0] > 0:
-
-                u_k[1, 0] = 20
-            else:
-                u_k[1, 0] = -20
-        """
         if u_k[1,0]<-80:
             u_k[1,0]=-80
         elif u_k[1,0]>0:
             u_k[1,0]=0
-
+        # translate the u_k to the delta_u_k
+        delta_u_k[0, 0] =  u_k[0, 0] - u_qp[0,0]
+        delta_u_k[1, 0] =  u_k[1, 0]- u_qp[1,0]
 
         #pdb.set_trace()
         #input[0]=u_k[0,0]
@@ -166,6 +159,8 @@ for batch_index in range(batch):
         #u_k_last[1, item] = u_k[1, 0]
         u_k_last[item,0] = u_k[0, 0]
         u_k_last[item,1] = u_k[1, 0]
+        delta_u_k_last[item,0] = delta_u_k[0, 0]
+        delta_u_k_last[item,1] = delta_u_k[1, 0]
         #pdb.set_trace()
         y_k_last[item]=y_step[:,1]
         #pdb.set_trace()

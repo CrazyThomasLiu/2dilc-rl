@@ -29,6 +29,10 @@ class Evaluator:
         self.target_return = eval_env.target_return
 
         self.r_max = -np.inf
+        'after long training'
+        self.r_max_long = -np.inf
+
+
         self.eval_time = 0
         self.used_time = 0
         self.total_step = 0
@@ -230,7 +234,17 @@ class Evaluator:
             # pdb.set_trace()
             print(f"{self.agent_id:<3}{self.total_step:8.2e}{self.r_max:8.2f} |")  # save policy and print
             # pdb.set_trace()
+
         #self.recorder.append((self.total_step, r_avg, r_std, r_exp, *log_tuple))  # update recorder
+        '''save the policy network after half train'''
+        if self.total_step>300000:
+            if_save_long = r_exp > self.r_max_long
+            if if_save_long:  # save checkpoint with highest episode return
+                self.r_max_long = r_exp  # update max reward (episode return)
+                # act_save_path = f'{self.cwd}/actor.pth'
+                # pdb.set_trace()
+                act_save_path = f'{self.distance_path}/actor_long.pth'
+                torch.save(act.state_dict(), act_save_path)  # save policy network in *.pth
         '''print some information to Terminal'''
         # pdb.set_trace()
         if_reach_goal = bool(self.r_max > self.target_return)  # check if_reach_goal

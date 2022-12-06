@@ -129,7 +129,8 @@ def train_and_evaluate(args, agent_id=0):
     #current_dir=os.path.join(current_dir, "runs")
     #current_dir = os.path.join(current_dir, "runs2")
     #current_dir = os.path.join(current_dir, "runs2_ilcinrl")
-    current_dir = os.path.join(current_dir, "runs2_ilcinrl_timebatch_sinus")
+    #current_dir = os.path.join(current_dir, "runs2_ilcinrl_timebatch_sinus")
+    current_dir = os.path.join(current_dir, "runs2_MIMO_cstr_40_time_batch")
     #current_dir = os.path.join(current_dir, "runs3")
     number = 1
     distance_path = os.path.join(current_dir, "AgentModSAC_Linearsys_SISO_Step_{number}".format(number=number))
@@ -144,7 +145,7 @@ def train_and_evaluate(args, agent_id=0):
     save_args_path = os.path.join(distance_path, 'args.yaml')
     fp = open(save_args_path, 'w')
     fp.write(yaml.dump(args.__dict__))
-    fp.close()
+
     '''init Evaluator'''
     #pdb.set_trace()
     eval_env = build_env(env) if args.eval_env is None else args.eval_env

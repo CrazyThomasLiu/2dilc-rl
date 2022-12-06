@@ -137,6 +137,7 @@ class ActorSAC(nn.Module):
         return self.net_a_avg(tmp).tanh()  # action
 
     def get_action(self, state):
+        #TODO: how to set the clamp
         t_tmp = self.net_state(state)
         a_avg = self.net_a_avg(t_tmp)  # NOTICE! it is a_avg without .tanh()
         a_std = self.net_a_std(t_tmp).clamp(-20, 2).exp()

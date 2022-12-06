@@ -8,19 +8,18 @@ import copy
 import typing
 import pprint
 import csv
-
+np.set_printoptions(precision=20,suppress=True)
 class BatchSysEnv:
-    def __init__(self,T_length,sys,T=0.01,X0=np.array((0.47,396.9)),action_co=10):
+    def __init__(self,T_length,sys,T=0.01,X0=np.array((0.47,396.9))):
         self.sys=sys
         self.T=T
         self.T_in=np.array((0.0,0.0))
-        self.X0=X0
-        self.X0_unchanged=X0
+        self.X0=copy.deepcopy(X0)
+        self.X0_unchanged=copy.deepcopy(X0)
         self.T_length=T_length
         self.env_num=1
         self.batch_num = 0
         self.time=0
-        self.action_co=action_co
         # define the reference trajectory
         self.y_ref = np.ones((T_length, 2))
         self.y_ref[:, 0] = 0.57 * self.y_ref[:, 0]
@@ -34,6 +33,9 @@ class BatchSysEnv:
         # define the 2DILC Controller
         self.K = np.array([[-153.85851789,-63.47479029,39.07891756,39.07647162]
                ,[-79.97401402,-153.08904682,5.98394417,6.03835231]])
+        # define the equilibirum point
+        self.x_qp = np.array([[0.57336624], [395.3267527]])
+        self.u_qp = np.array([[1.], [0.]])
         # Increasing the dim from 1 to 2
         self.x_k = copy.deepcopy(np.expand_dims(X0,axis=0))
         'only the state need a additional time length to cal the initial ilc control'
@@ -48,6 +50,9 @@ class BatchSysEnv:
         self.r_k = np.zeros((self.n,1))
         self.u_k = np.zeros((self.n,1))
         self.u_k_last = np.zeros((self.T_length, self.n))
+        self.delta_u_k = np.zeros((self.n, 1))
+        self.delta_u_k_last = np.zeros((self.T_length,self.n))
+
         self.input_signal = np.zeros((self.n,1))
         #pdb.set_trace()
         # give the first 2D ILC control signal
@@ -80,9 +85,8 @@ class BatchSysEnv:
 
     def reset(self):
         # set the sample time
-        #pdb.set_trace()
         self.T_in = np.array((0.0, 0.0))
-        self.X0=self.X0_unchanged
+        self.X0=copy.deepcopy(self.X0_unchanged)
         self.time = 0
         self.x_k = copy.deepcopy(np.expand_dims(self.X0,axis=0))
         self.input_signal = np.zeros((self.n,1))
@@ -132,25 +136,45 @@ class BatchSysEnv:
         # set the continuous sample time
         #pdb.set_trace()
         #TODO: set the action
-        """here how to choose the action"""
-        action=self.action_co*action
-        self.T_in[0] = self.T_in[1]
-        self.T_in[1] = self.T_in[1] + self.T
+        # map the [-1,1] to the constrained input
 
+        #action_map_u1=5*action[0]+5
+        #action_map_u2 = 40*action[1] -40
+        action_map_u1=action[0]
+        action_map_u2 =action[1]
+        #self.T_in[0] = self.T_in[1]
+        #self.T_in[1] = self.T_in[1] + self.T
+        self.T_in[0] = self.time*self.T
+        self.T_in[1] = (self.time+1)*self.T
+        #pdb.set_trace()
         # the sum control signal of the RL+2DILC
-        self.input_signal[0,0]=self.u_k[0][0]+action[0]
-        self.input_signal[1,0] =self.u_k[1][0]+action[1]
-
+        self.input_signal[0,0]=self.u_k[0][0]+action_map_u1
+        self.input_signal[1,0] =self.u_k[1][0]+action_map_u2
+        #pdb.set_trace()
         # TODO: Constained
+        if self.input_signal[0,0] > 10:
+            self.input_signal[0,0] = 10
+        elif self.input_signal[0,0] < 0:
+            self.input_signal[0,0] = 0
 
+        # input 2 is the cooling so only negative
+        if self.input_signal[1,0] < -80:
+            self.input_signal[1,0] = -80
+        elif self.input_signal[1,0] > 0:
+            self.input_signal[1,0] = 0
         response_input = np.repeat(self.input_signal, 2, axis=1)
-        pdb.set_trace()
+        #pdb.set_trace()
         t_step, y_step, x_step = control.input_output_response(self.sys, self.T_in, response_input, X0=self.X0,params={"batch_num":self.batch_num}, return_x=True,method='LSODA')
+        """
+        if self.batch_num==0 and self.time==6:
+            pdb.set_trace()
+        """
         # the state space
         #pdb.set_trace()
+        # TODO: check the state space
         # 0 to 2 for the uRL
-        self.state[0,0]=action[0]
-        self.state[1, 0] = action[1]
+        self.state[0,0]=copy.deepcopy(action_map_u1)
+        self.state[1, 0] = copy.deepcopy(action_map_u2)
         self.state[:,1] = self.u_rl_k_last[self.time,:]
         if self.time<(self.T_length-1):
             self.state[:,2] = self.u_rl_k_last[(self.time+1),:]
@@ -188,19 +212,24 @@ class BatchSysEnv:
         # change the initial state
         self.X0[0] = x_step[0][1]
         self.X0[1] = x_step[1][1]
+        #pdb.set_trace()
         # save the data into the memory
         # ILC data
         self.u_k_last[self.time,:]=self.u_k[:,0]
+        #self.delta_u_k_last[item,0] = self.u_k[0,0]-self.u_qp[0,0]
+        #self.delta_u_k_last[item,1] = self.u_k[1,0]-self.u_qp[1,0]
+        self.delta_u_k_last[self.time,0] = self.input_signal[0,0]-self.u_qp[0,0]
+        self.delta_u_k_last[self.time,1] = self.input_signal[1,0]-self.u_qp[1,0]
         self.y_k_last[self.time,:]=y_step[:,1]
-
+        #pdb.set_trace()
         # change the current state
         #pdb.set_trace()
         self.x_k_current[(self.time + 1),:] = x_step[:,1]
         self.x_k[0] = x_step[:,1]  # change the current information
         # RL data
         #pdb.set_trace()
-        self.u_rl_k_last[self.time,0]=action[0]
-        self.u_rl_k_last[self.time, 1] = action[1]
+        self.u_rl_k_last[self.time,0]=copy.deepcopy(action_map_u1)
+        self.u_rl_k_last[self.time, 1] = copy.deepcopy(action_map_u2)
         # cal the reward fucntion
         reward= self.A1*(self.y_ref[self.time,0]-y_step[0,1])**2+self.A2*(self.y_ref[self.time,1]-y_step[1,1])**2
         #pdb.set_trace()
@@ -235,15 +264,30 @@ class BatchSysEnv:
         self.x_2d=np.block([[tem_x,tem_y]])
         #pdb.set_trace()
         #cal the control signal of the 2D ILC
-        self.r_k=self.K@self.x_2d.T
+        #self.r_k=self.K@self.x_2d.T
+        self.r_k = np.dot(self.K,self.x_2d.T)
         #pdb.set_trace()
         #self.u_k[0] = self.u_k_last[self.time] + self.r_k[0]
         #self.u_k[0]= self.u_k_last[self.time]+ self.r_k[0]+self.u_rl_k_last[self.time]
-        self.u_k[0,0] = self.u_k_last[self.time,0] + self.r_k[0,0] + self.u_rl_k_last[self.time,0]
-        self.u_k[1,0] = self.u_k_last[self.time,1] + self.r_k[1,0] + self.u_rl_k_last[self.time,1]
+        #self.delta_u_k[0,0]=self.delta_u_k_last[self.time,0]+self.r_k[0,0]
+        #self.delta_u_k[1, 0] = self.delta_u_k_last[self.time, 1] + self.r_k[1, 0]
+
+        #self.delta_u_k[0,0]=self.delta_u_k_last[self.time,0]+self.r_k[0,0]+ self.u_rl_k_last[self.time,0]
+        #self.delta_u_k[1, 0] = self.delta_u_k_last[self.time, 1] + self.r_k[1, 0]+ self.u_rl_k_last[self.time,1]
+        self.delta_u_k[0,0]=self.delta_u_k_last[self.time,0]+self.r_k[0,0]
+        self.delta_u_k[1, 0] = self.delta_u_k_last[self.time, 1] + self.r_k[1, 0]
+        #self.u_k[0,0] = self.u_k_last[self.time,0] + self.r_k[0,0] + self.u_rl_k_last[self.time,0]
+        #self.u_k[1,0] = self.u_k_last[self.time,1] + self.r_k[1,0] + self.u_rl_k_last[self.time,1]
+
+        self.u_k[0, 0] =  self.delta_u_k[0, 0] + self.u_qp[0,0]
+        self.u_k[1, 0] =  self.delta_u_k[1, 0]+ self.u_qp[1,0]
         #TODO: set the constrian
         # constained the input
-        pdb.set_trace()
+        #pdb.set_trace()
+        """
+        if self.batch_num == 3 and self.time == 92:
+            pdb.set_trace()
+        """
         if self.u_k[0, 0] > 10:
             self.u_k[0, 0] = 10
         elif self.u_k[0, 0] < 0:
@@ -254,7 +298,8 @@ class BatchSysEnv:
             self.u_k[1, 0] = -80
         elif self.u_k[1, 0] > 0:
             self.u_k[1, 0] = 0
-
+        #self.delta_u_k[0,0]=self.u_k[0, 0]-self.u_qp[0,0]
+        #self.delta_u_k[1, 0] =self.u_k[1, 0]-self.u_qp[1,0]
 
 
 
@@ -273,19 +318,21 @@ if __name__=="__main__":
     l = 2  # output
     T_length = 200
     # T_length=300
-    batch = 40
+    batch = 20
     save_figure = False
 
 
     def state_update(t, x, u, params):
         batch_num = params.get('batch_num', 0)
         # Map the states into local variable names
+        batch_num = params.get('batch_num', 0)
+        # print(batch_num)
         z1 = np.array([x[0]])
         z2 = np.array([x[1]])
         n1 = np.array([u[0]])
         n2 = np.array([u[1]])
         # Compute the discrete updates
-        a = 1 + 0.1 * np.sin(5 * t * np.pi) + 0.1 * np.sin(batch_num * np.pi / 10)
+        a = 1 + 0.1 * np.sin(2.5 * t * np.pi) + 0.1 * np.sin(batch_num * np.pi / 10)
         # a = 1+ 0.1 * np.sin(batch_num * np.pi / 10)
         dz1 = -(a + 7.2 * np.power(10., 10) * np.exp(-np.power(10., 4) / z2)) * z1 + n1
         # dz2 = -1.44 * np.power(10., 13) * np.exp(-np.power(10., 4) / z2) * z1 - z2 + 1476.946
@@ -308,26 +355,29 @@ if __name__=="__main__":
         state_update, ouput_update, inputs=('u1', 'u2'), outputs=('y1', 'y2'),
         states=('dz1', 'dz2'), dt=0, name='Nonlinear_CSTR')
 
-    print("Contineous system:", control.isctime(Nonlinear_CSTR))
+    print("Continuous system:", control.isctime(Nonlinear_CSTR))
     "2. define the initial state "
     X0 = np.array((0.47, 396.9))  # Initial x1, x2
     T = np.array((0.0, 0.01))
     sample_time = 0.01
-
+    x_k = copy.deepcopy(np.expand_dims(X0, axis=0))
     controlled_system=BatchSysEnv(T_length=T_length,sys=Nonlinear_CSTR,X0=X0)
     #controlled_system.reset()
-    out=[]
+    out=np.repeat(x_k,T_length+1,axis=0)
     out_batch=[]
     for batch_index in range(batch):
         for item in range(T_length):
             state,out_tem,done,invalid=controlled_system.step([0.0,0.0])
             #pdb.set_trace()
-            out.append([state[6],state[20]])
+            out[(item+1),0]=state[6]
+            out[(item + 1), 1] = state[20]
         out_batch.append(out)
+        #pdb.set_trace()
         controlled_system.reset()
-        out = []
+        out = np.repeat(x_k,T_length+1,axis=0)
+    pdb.set_trace()
     """save the sqrt to the csv"""
-    with open('./y_out_rl_env.csv', 'w', encoding='UTF8', newline='') as f:
+    with open('./y_out_rl_env_float20_new.csv', 'w', encoding='UTF8', newline='') as f:
         writer = csv.writer(f)
 
         # write multiple rows

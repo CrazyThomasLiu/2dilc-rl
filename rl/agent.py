@@ -91,6 +91,7 @@ class AgentBase:
         `array states` states.shape==(batch_size, state_dim, )
         return `array actions` actions.shape==(batch_size, action_dim, ),  -1 < action < +1
         """
+        #pdb.set_trace()
         states = torch.as_tensor(states, dtype=torch.float32, device=self.device)
         actions = self.act(states)
         if rd.rand() < self.explore_rate:  # epsilon-greedy
@@ -568,6 +569,7 @@ class AgentSAC(AgentBase):
 
     def select_actions(self, states):
         states = torch.as_tensor(states, dtype=torch.float32, device=self.device)
+        #pdb.set_trace()
         if rd.rand() < self.explore_rate:  # epsilon-greedy
             actions = self.act.get_action(states)
         else:
@@ -645,6 +647,7 @@ class AgentModSAC(AgentSAC):  # Modified SAC using reliable_lambda and TTUR (Two
         obj_actor = None
         update_a = 0
         alpha = None
+        #pdb.set_trace()
         for update_c in range(1, int(buffer.now_len * repeat_times / batch_size)):
             alpha = self.alpha_log.exp()
 
