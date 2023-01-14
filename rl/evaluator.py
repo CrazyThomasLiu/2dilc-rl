@@ -264,6 +264,39 @@ class Evaluator:
         """
 
         return if_reach_goal, if_save
+
+    def evaluate_and_save_evalenv(self, act, steps, r_exp, log_tuple, cri_scheduler, act_scheduler) -> (bool, bool):  # 2021-09-09
+        self.total_step += steps  # update total training steps
+        """"""
+
+        self.writer.add_scalar('episodemeanReward', r_exp, self.total_step)
+        '''save the policy network'''
+        if_save = r_exp > self.r_max
+        if if_save:  # save checkpoint with highest episode return
+            rewards_steps_list = []
+            for item in range(self.eval_times1):
+                episode_return, episode_step,episode_state=get_episode_return_and_step_state(self.eval_env, act, self.device)
+                rewards_steps_list.append((episode_return, episode_step))
+
+            r_avg, r_std, s_avg, s_std = self.get_r_avg_std_s_avg_std(rewards_steps_list)
+            r_avg_tem=r_avg/(episode_step+1)
+            #pdb.set_trace()
+            if r_avg_tem>self.r_max:
+                self.r_max = r_avg_tem # update max reward (episode return)
+                # act_save_path = f'{self.cwd}/actor.pth'
+                #pdb.set_trace()
+                act_save_path = f'{self.distance_path}/best_actor.pth'
+                torch.save(act.state_dict(), act_save_path)  # save policy network in *.pth
+                # pdb.set_trace()
+                print(f"{self.agent_id:<3}{self.total_step:8.2e}{self.r_max:8.2f} |")  # save policy and print
+            # pdb.set_trace()
+
+        '''print some information to Terminal'''
+        # pdb.set_trace()
+        if_reach_goal = bool(self.r_max > self.target_return)  # check if_reach_goal
+        return if_reach_goal, if_save
+
+
     @staticmethod
     def get_r_avg_std_s_avg_std(rewards_steps_list):
         rewards_steps_ary = np.array(rewards_steps_list, dtype=np.float32)

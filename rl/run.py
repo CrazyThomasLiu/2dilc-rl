@@ -117,6 +117,7 @@ def train_and_evaluate(args, agent_id=0):
     '''init: Agent'''
     agent = args.agent
     agent.init(args.net_dim, env.state_dim, env.action_dim, args.learning_rate, args.if_per_or_gae, args.env_num)
+    pdb.set_trace()
     agent.save_or_load_agent(args.cwd, if_save=False)
     #pdb.set_trace()
     """
@@ -129,8 +130,8 @@ def train_and_evaluate(args, agent_id=0):
     #current_dir=os.path.join(current_dir, "runs")
     #current_dir = os.path.join(current_dir, "runs2")
     #current_dir = os.path.join(current_dir, "runs2_ilcinrl")
-    #current_dir = os.path.join(current_dir, "runs2_ilcinrl_timebatch_sinus")
-    current_dir = os.path.join(current_dir, "runs2_MIMO_cstr_40_time_batch")
+    current_dir = os.path.join(current_dir, "runs2_ilcinrl_timebatch_sinus")
+    #current_dir = os.path.join(current_dir, "runs2_MIMO_cstr_40_time_batch")
     #current_dir = os.path.join(current_dir, "runs3")
     number = 1
     distance_path = os.path.join(current_dir, "AgentModSAC_Linearsys_SISO_Step_{number}".format(number=number))
@@ -262,6 +263,8 @@ def train_and_evaluate(args, agent_id=0):
             #temp = evaluator.evaluate_and_save(agent.act, steps, r_exp, logging_tuple)
             #temp = evaluator.evaluate_and_save(agent.act, steps, r_exp, logging_tuple , agent.cri_scheduler, agent.act_scheduler)
             temp = evaluator.evaluate_and_save_liu(agent.act, steps, r_exp, logging_tuple , agent.cri_scheduler, agent.act_scheduler)
+            #temp = evaluator.evaluate_and_save_evalenv(agent.act, steps, r_exp, logging_tuple, agent.cri_scheduler,
+            #                                       agent.act_scheduler)
             #########################################################################
             #########################################################################
             if_reach_goal, if_save = temp
@@ -294,7 +297,7 @@ def explore_before_training(env, target_step):  # for off-policy only
         else:
             """Jianan Liu
             """
-
+            #TODO: why [-1 1]
             action = rd.uniform(-1, 1, size=action_dim)
             #action = rd.uniform(-0.1, 0.1, size=action_dim)
             #pdb.set_trace()

@@ -60,7 +60,7 @@ class BatchSysEnv:
         #self.cal_2DILCcontroller()
         #TODO: set the multi weight
         # reward function weight
-        self.A1=-1.
+        self.A1=-2.
         #self.A2=self.A1/200
         #self.A2 = self.A1 / 50
         #self.A2 = self.A1 / 5
@@ -75,7 +75,7 @@ class BatchSysEnv:
         self.env_name="MIMO_CSTR_time_batch"
         self.state_dim=28
         self.action_dim=2
-        #self.max_step=N
+        self.max_step=200
         self.if_discrete=False
         self.target_return = 0.0
         self.episode_return = 0.0

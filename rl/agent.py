@@ -559,7 +559,7 @@ class AgentSAC(AgentBase):
                                       requires_grad=True, device=self.device)  # trainable parameter
         self.alpha_optim = torch.optim.Adam((self.alpha_log,), lr=learning_rate)
         self.target_entropy = np.log(action_dim)
-
+        #TODO SmoothL1Loss is squared not suitable for the MIMO-CSTR
         if if_use_per:
             self.criterion = torch.nn.SmoothL1Loss(reduction='none' if if_use_per else 'mean')
             self.get_obj_critic = self.get_obj_critic_per
@@ -660,6 +660,7 @@ class AgentModSAC(AgentSAC):  # Modified SAC using reliable_lambda and TTUR (Two
             #self.optim_update(self.cri_optim, obj_critic)
             #self.optim_update_new(self.cri_optim, obj_critic, self.cri.parameters())
             self.optim_update_new_scheduler(self.cri_optim, obj_critic, self.cri.parameters(),self.cri_scheduler)
+            #pdb.set_trace()
             self.soft_update(self.cri_target, self.cri, soft_update_tau)
             #pdb.set_trace()
             a_noise_pg, logprob = self.act.get_action_logprob(state)  # policy gradient
@@ -670,7 +671,7 @@ class AgentModSAC(AgentSAC):  # Modified SAC using reliable_lambda and TTUR (Two
             self.optim_update_new(self.alpha_optim, obj_alpha, self.alpha_log)
             with torch.no_grad():
                 self.alpha_log[:] = self.alpha_log.clamp(-16, 2).detach()
-
+            #pdb.set_trace()
             '''objective of actor using reliable_lambda and TTUR (Two Time-scales Update Rule)'''
             reliable_lambda = np.exp(-self.obj_critic ** 2)  # for reliable_lambda
             if_update_a = update_a / update_c < 1 / (2 - reliable_lambda)
@@ -686,8 +687,44 @@ class AgentModSAC(AgentSAC):  # Modified SAC using reliable_lambda and TTUR (Two
                 self.soft_update(self.act_target, self.act, soft_update_tau)
         #pdb.set_trace()
         return self.obj_critic, obj_actor.item(), alpha.item()
+    def save_or_load_agent_implementation(self, cwd, if_save):
+        """save or load the training files for agent from disk.
 
+        `str cwd` current working directory, where to save training files.
+        `bool if_save` True: save files. False: load files.
+        """
+        def load_torch_file(model_or_optim, _path):
+            state_dict = torch.load(_path, map_location=lambda storage, loc: storage)
+            model_or_optim.load_state_dict(state_dict)
 
+        name_obj_list = [('actor', self.act), ('act_target', self.act_target), ('act_optim', self.act_optim),
+                         ('critic', self.cri), ('cri_target', self.cri_target), ('cri_optim', self.cri_optim),
+                         ('alpha_optim', self.alpha_optim),]
+        name_obj_list = [(name, obj) for name, obj in name_obj_list if obj is not None]
+        #pdb.set_trace()
+        if if_save:
+            #pdb.set_trace()
+            for name, obj in name_obj_list:
+                save_path = f"{cwd}/{name}.pth"
+                torch.save(obj.state_dict(), save_path)
+            'self.alpha_log is not network, which do not have the stata_dict()'
+            tem_alpha_log=self.alpha_log.detach().cpu().numpy()
+            save_path = f"{cwd}/alpha_log.npz"
+            np.savez_compressed(save_path, alpha_log=tem_alpha_log,)
+            #pdb.set_trace()
+            print(f"| agent save in: {save_path}")
+
+        else:
+            for name, obj in name_obj_list:
+                save_path = f"{cwd}/{name}.pth"
+                load_torch_file(obj, save_path) if os.path.isfile(save_path) else None
+
+            save_path = f"{cwd}/alpha_log.npz"
+            if os.path.isfile(save_path):
+                agent_dict = np.load(save_path)
+                tem_alpha_log = agent_dict['alpha_log']
+                self.alpha_log = torch.as_tensor(tem_alpha_log, dtype=torch.float32, device=self.device)
+            print(f"| agent load: {save_path}")
 class AgentPPO(AgentBase):
     def __init__(self):
         super().__init__()

@@ -56,7 +56,7 @@ class BatchSysEnv:
         # give the first 2D ILC control signal
         self.cal_2DILCcontroller()
         # environment information
-        self.env_name="2D-ILC_RL"
+        self.env_name="Linear_injection_modeling"
         #self.state_dim=3
         self.state_dim=14
         self.action_dim=1

@@ -73,7 +73,7 @@ class BatchSysEnv:
         self.env_name="MIMI_CSTR_time_batch"
         self.state_dim=28
         self.action_dim=2
-        #self.max_step=N
+        self.max_step=200
         self.if_discrete=False
         self.target_return = 3.5
         self.episode_return = 0.0
