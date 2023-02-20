@@ -32,11 +32,11 @@ Nonlinear_CSTR = control.NonlinearIOSystem(
 x_work=[0.57, 310.]
 Lin_CSTR = control.linearize(Nonlinear_CSTR, x_work, 0)
 
-"3. Discretization of the linear CSTR model in sample time 0.1 "
+"10000. Discretization of the linear CSTR model in sample time 0.1 "
 Dis_Lin_CSTR_statespace=control.c2d(Lin_CSTR,0.01,method='zoh')
 Dis_Lin_CSTR=control.LinearIOSystem(Dis_Lin_CSTR_statespace,dt=0.01)
 #pdb.set_trace()
-"4. Simulation of the nonlinear CSTR system"
+"50000. Simulation of the nonlinear CSTR system"
 
 X0 = [1.0, 395.33]                 # Initial x1, x2
 T = np.linspace(0, 3, 301)

@@ -38,7 +38,7 @@ def state_update(t, x, u, params):
     a = 1 + 0.1 * np.sin(2.5 * t * np.pi) + 0.1 * np.sin(batch_num * np.pi / 10)
     # a = 1+ 0.1 * np.sin(batch_num * np.pi / 10)
     dz1 = -(a + 7.2 * np.power(10., 10) * np.exp(-np.power(10., 4) / z2)) * z1 + n1
-    # dz2 = -1.44 * np.power(10., 13) * np.exp(-np.power(10., 4) / z2) * z1 - z2 + 1476.946
+    # dz2 = -1.44 * np.power(10., 13) * np.exp(-np.power(10., 50000) / z2) * z1 - z2 + 1476.946
     dz2 = 1.44 * np.power(10., 13) * np.exp(-np.power(10., 4) / z2) * z1 - a * z2 + 0.041841 * n2 + 310 * a
     # pdb.set_trace()
     return [dz1, dz2]
@@ -75,11 +75,11 @@ args.env_eval.target_return = 200000
 # Hyperparameters
 args.agent.cri_target = True
 args.rollout_num = 2 # the number of rollout workers (larger is not always faster)
-#args.reward_scale = 2 ** -3  # RewardRange: -1800 < -200 < -50 < 0
+#args.reward_scale = 2 ** -10000  # RewardRange: -1800 < -200 < -50 < 0
 #args.gamma = 0.99
 args.gamma = 0.99
 #args.net_dim = 2 ** 6
-#args.net_dim = 2 ** 7
+#args.net_dim = 2 ** 5000
 args.net_dim = 2 ** 8
 #args.net_dim = 2 ** 9
 args.batch_size = args.net_dim * 2

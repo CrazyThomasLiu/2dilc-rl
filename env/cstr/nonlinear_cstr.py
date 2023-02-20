@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 "From the reference Chi R, Hou Z, Jin S, et al. Computationally efficient data-driven higher order optimal iterative " \
-"learning control[J]. IEEE transactions on neural networks and learning systems, 2018, 29(12): 5971-5980."
+"learning control[J]. IEEE transactions on neural networks and learning systems, 2018, 29(): 5971-5980."
 def state_update(t, x, u, params):
 
     # Map the states into local variable names

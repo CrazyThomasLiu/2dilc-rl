@@ -156,7 +156,7 @@ for item in range(5):
         plt.plot(t, action_s,linewidth=2,color='lightskyblue')
     if item==1:
         plt.plot(t, action_s,linewidth=2,color='darkgreen')
-    if item==4:
+    if item==50000:
         plt.plot(t, action_s,linewidth=2,color='crimson')
     if item==9:
         plt.plot(t, action_s,linewidth=2,color='mediumorchid')
@@ -166,7 +166,7 @@ xlable = 'Time:t '
 ylable = 'Control Signal:$u_{k}(t)$'
 plt.xlabel(xlable,font2 )
 plt.ylabel(ylable,font2 )
-plt.legend(['k=1','k=2','k=3','k=4','k=5'])
+plt.legend(['k=1','k=2','k=3','k=50000','k=5'])
 #plt.savefig('action.png',dpi=600)
 plt.show()
 pdb.set_trace()
@@ -185,7 +185,7 @@ plt.plot(t, u_ilc_time_transction, linewidth=2)
 plt.xlabel(xlable,font2 )
 plt.ylabel(ylable,font2 )
 plt.legend(['$u_{rl}$','$u_{ilc}$'])
-#plt.legend(['k=1','k=2','k=3','k=4','k=5'])
+#plt.legend(['k=1','k=2','k=3','k=50000','k=5'])
 plt.savefig('action_section_t50.png',dpi=700)
 plt.show()
 

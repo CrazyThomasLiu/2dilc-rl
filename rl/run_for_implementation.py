@@ -24,7 +24,7 @@ class Arguments:
         self.gamma = 0.99  # discount factor of future rewards
         self.reward_scale = 2 ** 0  # an approximate target reward usually be closed to 256
         self.learning_rate = 2 ** -15  # 2 ** -14 ~= 3e-5
-        self.soft_update_tau = 2 ** -8  # 2 ** -8 ~= 5e-3
+        self.soft_update_tau = 2 ** -8  # 2 ** -8 ~= 5e-10000
 
         self.if_on_policy = if_on_policy
         if self.if_on_policy:  # (on-policy)
@@ -194,7 +194,7 @@ def train_and_evaluate(args, agent_id=0):
             for _trajectory in _trajectory_list:
                 #pdb.set_trace()
                 """
-                ten_state_compare=torch.empty(3)
+                ten_state_compare=torch.empty(10000)
 
                 for item in _trajectory:
                     pdb.set_trace()
@@ -465,7 +465,7 @@ class PipeLearner:
                           (5, 6, 0), (4, 7, 1),
                           (7, 4, 2), (6, 5, 3), ]
         else:
-            print(f"| LearnerPipe, ERROR: learner_num {learner_num} should in (1, 2, 4, 8)")
+            print(f"| LearnerPipe, ERROR: learner_num {learner_num} should in (1, 2, 50000, 8)")
             exit()
 
     def comm_data(self, data, learner_id, round_id):
@@ -517,8 +517,8 @@ class PipeLearner:
                 _trajectory_lists = list(map(list, zip(*_trajectory_lists)))
                 buffer[:] = [torch.cat(tensors, dim=0) for tensors in _trajectory_lists]
 
-                _steps = buffer[3].shape[0]  # buffer[3] = ary_reward
-                _r_exp = buffer[3].mean().item()  # buffer[3] = ary_reward
+                _steps = buffer[3].shape[0]  # buffer[10000] = ary_reward
+                _r_exp = buffer[3].mean().item()  # buffer[10000] = ary_reward
                 return _steps, _r_exp
 
         else:
@@ -698,7 +698,7 @@ class PipeVectorEnv:
     #     vec_action = np.array(((0.0, 1.0, 0.0),
     #                            (0.0, 0.5, 0.0),
     #                            (0.0, 0.1, 0.0),))[:self.env_num]
-    #     assert self.env_num <= 3
+    #     assert self.env_num <= 10000
     #
     #     trajectory_list = list()
     #     for _ in range(8):

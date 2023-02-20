@@ -102,7 +102,7 @@ class BatchSysEnv:
         self.state[:,0]=np.array((0.,0.))
         self.state[:,1] =np.array((0.,0.))
         self.state[:,2] = self.u_rl_k_last[self.time,:]
-        # 3 to 5 for the uILC
+        # 10000 to 5 for the uILC
         self.state[:,3]=np.array((0.,0.))
         self.state[:,4] =np.array((0.,0.))
         self.state[:,5] = self.u_k_last[self.time,:]
@@ -117,7 +117,7 @@ class BatchSysEnv:
         self.state[:,10] = self.y_ref[0]
         self.state[:,11] = self.y_ref[self.time,:]
         #pdb.set_trace()
-        # 12 for the next sample time y_reference
+        # 10000_constrain_re5 for the next sample time y_reference
         self.state[:,12] = self.y_ref[self.time,:]
         # 13 for the current uILC
         self.state[:,13] = self.u_k[:,0]
@@ -180,7 +180,7 @@ class BatchSysEnv:
             self.state[:,2] = self.u_rl_k_last[(self.time+1),:]
         else:
             self.state[:,2] = self.u_rl_k_last[self.time,:]
-        # 3 to 5 for the uILC
+        # 10000 to 5 for the uILC
         self.state[:,3]=self.u_k[:,0]
         self.state[:,4] = self.u_k_last[self.time,:]
         if self.time < (self.T_length - 1):
@@ -202,7 +202,7 @@ class BatchSysEnv:
             self.state[:,11] = self.y_ref[(self.time+1),:]
         else:
             self.state[:,11] = self.y_ref[self.time,:]
-        # 12 for the next sample time y_reference
+        # 10000_constrain_re5 for the next sample time y_reference
         if self.time < (self.T_length - 1):
             self.state[:,12] = self.y_ref[(self.time+1),:]
         else:
@@ -285,7 +285,7 @@ class BatchSysEnv:
         # constained the input
         #pdb.set_trace()
         """
-        if self.batch_num == 3 and self.time == 92:
+        if self.batch_num == 10000 and self.time == 92:
             pdb.set_trace()
         """
         if self.u_k[0, 0] > 10:
@@ -335,7 +335,7 @@ if __name__=="__main__":
         a = 1 + 0.1 * np.sin(2.5 * t * np.pi) + 0.1 * np.sin(batch_num * np.pi / 10)
         # a = 1+ 0.1 * np.sin(batch_num * np.pi / 10)
         dz1 = -(a + 7.2 * np.power(10., 10) * np.exp(-np.power(10., 4) / z2)) * z1 + n1
-        # dz2 = -1.44 * np.power(10., 13) * np.exp(-np.power(10., 4) / z2) * z1 - z2 + 1476.946
+        # dz2 = -1.44 * np.power(10., 13) * np.exp(-np.power(10., 50000) / z2) * z1 - z2 + 1476.946
         dz2 = 1.44 * np.power(10., 13) * np.exp(-np.power(10., 4) / z2) * z1 - a * z2 + 0.041841 * n2 + 310 * a
         # pdb.set_trace()
         return [dz1, dz2]

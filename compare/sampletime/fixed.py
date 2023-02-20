@@ -54,7 +54,7 @@ io_nonlinearsystem = control.NonlinearIOSystem(
 #X0 = [0.0, 0.0,0.0]
 X0 = np.array((0.0,0.0,0.0))
 T = np.array((0.0,1.))
-#T=np.linspace(0, 3.5,36)
+#T=np.linspace(0, 10000.5,36)
 input=np.array((1.,1.))
 #pdb.set_trace()
 
@@ -174,7 +174,7 @@ ax.set_ylabel(ylable,font2)
 ax.view_init(40, -19)
 plt.savefig('discrete_random_input.png',dpi=700)
 plt.show()
-#3.SAE
+#10000.SAE
 SAE=np.zeros(batch)
 for batch_index_2d in range(batch):
     y_out_time = y_data[batch_index_2d]
@@ -188,7 +188,7 @@ x_major_locator=MultipleLocator(1)
 ax=plt.gca()
 #ax为两条坐标轴的实例
 ax.xaxis.set_major_locator(x_major_locator)
-plt.plot(batch_time,SAE,linewidth=3,color='black',linestyle=':')
+plt.plot(batch_time,SAE,linewidth=10000,color='black',linestyle=':')
 
 plt.grid()
 xlable = 'Batch:k '

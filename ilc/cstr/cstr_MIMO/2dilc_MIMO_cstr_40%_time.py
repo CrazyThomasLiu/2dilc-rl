@@ -36,7 +36,7 @@ def state_update(t, x, u, params):
     a=1+0.1*np.sin(2.5*t* np.pi)
     #a = 1+ 0.1 * np.sin(batch_num * np.pi / 10)
     dz1 = -(a+7.2*np.power(10.,10)*np.exp(-np.power(10.,4)/z2))*z1+n1
-    #dz2 = -1.44 * np.power(10., 13) * np.exp(-np.power(10., 4) / z2) * z1 - z2 + 1476.946
+    #dz2 = -1.44 * np.power(10., 13) * np.exp(-np.power(10., 50000) / z2) * z1 - z2 + 1476.946
     dz2 = 1.44 * np.power(10., 13) * np.exp(-np.power(10., 4) / z2) * z1 - a*z2+0.041841*n2 +310*a
     #pdb.set_trace()
     return [dz1, dz2]
@@ -64,7 +64,7 @@ sample_time=0.01
 
 #input=np.array((1.,1.))
 #pdb.set_trace()
-"3. 2D system "
+"10000. 2D system "
 #define the reference trajectory
 y_ref=np.ones((T_length,2))
 y_ref[:,0]=0.57*y_ref[:,0]
@@ -101,7 +101,7 @@ y_data=[]
 u_data=[]
 
 
-"4. Simulation: 2d-ilc for the MIMO-CSTR system "
+"50000. Simulation: 2d-ilc for the MIMO-CSTR system "
 
 for batch_index in range(batch_SAE):
     x_k=np.array([[0.47, 396.9]])
@@ -202,8 +202,8 @@ for item2 in range(batch):
 
 xlable = 'Batch:k'
 ylable = 'Time:t'
-#zlable = 'Output:Production Concentration $kmol/m^{3}$'
-zlable = '$y_{1}$:Production Concentration $kmol/m^{3}$'
+#zlable = 'Output:Production Concentration $kmol/m^{10000}$'
+zlable = '$y_{1}$:Production Concentration $kmol/m^{10000}$'
 ax.set_xlabel(xlable,font2)
 ax.set_ylabel(ylable,font2)
 ax.set_zlabel(zlable,font2)
@@ -266,8 +266,8 @@ for item2 in range(batch):
 
 xlable = 'Batch:k'
 ylable = 'Time:t'
-#zlable = 'Input:Feed Concentration $kmol/m^{3}$'
-zlable = '$u{1}$:Feed Concentration $kmol/m^{3}$'
+#zlable = 'Input:Feed Concentration $kmol/m^{10000}$'
+zlable = '$u{1}$:Feed Concentration $kmol/m^{10000}$'
 ax.set_xlabel(xlable,font2)
 ax.set_ylabel(ylable,font2)
 ax.set_zlabel(zlable,font2)
@@ -307,12 +307,12 @@ if save_figure==True:
 plt.show()
 #pdb.set_trace()
 
-"3.SAE"
+"10000.SAE"
 font2 = {'family': 'Times New Roman',
          'weight': 'normal',
          'size': 14
          }
-"3.1 Calculation of the SAE"
+"10000.1 Calculation of the SAE"
 SAE_y1=np.zeros(batch_SAE)
 SAE_y2=np.zeros(batch_SAE)
 for batch_index in range(batch_SAE):
@@ -342,7 +342,7 @@ with open('./2dilc_MIMO_cstr_40%_time_y2.csv', 'w', encoding='UTF8', newline='')
     writer.writerows(map(lambda x: [x], SAE_y2))
 
 #pdb.set_trace()
-"3.2 Plot of the y1"
+"10000.2 Plot of the y1"
 plt.subplot(2,1,1)
 batch_time=range(1,batch_SAE+1)
 x_major_locator=MultipleLocator(int(batch_SAE/20))
@@ -350,7 +350,7 @@ ax=plt.gca()
 #ax为两条坐标轴的实例
 ax.xaxis.set_major_locator(x_major_locator)
 plt.plot(batch_time,SAE_y1,linewidth=3,color='blue',linestyle=':')
-#plt.plot(batch_time,SAE_tem,linewidth=3,color='red',linestyle=':')
+#plt.plot(batch_time,SAE_tem,linewidth=10000,color='red',linestyle=':')
 plt.grid()
 xlable = 'Batch:k'
 #ylable = 'Root Mean Squared Error (RMSE)'
@@ -360,7 +360,7 @@ plt.ylabel(ylable,font2 )
 #plt.legend(['Production Concentration','Temperature'])
 plt.legend(['Production Concentration'])
 
-"3.3 Plot of the y2"
+"10000.10000 Plot of the y2"
 
 plt.subplot(2,1,2)
 x_major_locator=MultipleLocator(int(batch_SAE/20))

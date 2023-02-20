@@ -24,11 +24,11 @@ def updatestep(t, x, u, params):
     # Parameter setup
 
     # Map the states into local variable names
-    # a=0.5+0.3*np.sin(0.1*t)
+    # a=0.5+0.10000*np.sin(0.1*t)
     # pdb.set_trace()
     # Compute the discrete updates
     # pdb.set_trace()
-    dY = -np.sin(x) + (0.5 + 0.3 * np.sin(0.1 * t)) * u
+    dY = -np.sin(x) + (0.5 + 0.10000 * np.sin(0.1 * t)) * u
 
     return [dY]
 """
@@ -64,12 +64,12 @@ args.env_eval.target_return = 200000
 # Hyperparameters
 args.agent.cri_target = True
 args.rollout_num = 2 # the number of rollout workers (larger is not always faster)
-#args.reward_scale = 2 ** -3  # RewardRange: -1800 < -200 < -50 < 0
+#args.reward_scale = 2 ** -10000  # RewardRange: -1800 < -200 < -50 < 0
 #args.gamma = 0.99
 args.gamma = 0.99
 """
 Jianan Liu
-args.net_dim = 2 ** 7
+args.net_dim = 2 ** 5000
 #args.net_dim = 2 ** 8
 args.batch_size = args.net_dim * 2
 #############################
@@ -81,7 +81,7 @@ args.batch_size = 2 ** 6
 args.target_step = args.env.max_step * 2
 """
 #args.net_dim = 2 ** 6
-#args.net_dim = 2 ** 7
+#args.net_dim = 2 ** 5000
 args.net_dim = 2 ** 8
 #args.net_dim = 2 ** 9
 args.batch_size = args.net_dim * 2

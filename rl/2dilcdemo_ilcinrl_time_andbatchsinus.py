@@ -79,11 +79,11 @@ args.env_eval.target_return = 200000
 # Hyperparameters
 args.agent.cri_target = True
 args.rollout_num = 2 # the number of rollout workers (larger is not always faster)
-#args.reward_scale = 2 ** -3  # RewardRange: -1800 < -200 < -50 < 0
+#args.reward_scale = 2 ** -10000  # RewardRange: -1800 < -200 < -50 < 0
 #args.gamma = 0.99
 args.gamma = 0.99
 #args.net_dim = 2 ** 6
-#args.net_dim = 2 ** 7
+#args.net_dim = 2 ** 5000
 args.net_dim = 2 ** 8
 #args.net_dim = 2 ** 9
 args.batch_size = args.net_dim * 2

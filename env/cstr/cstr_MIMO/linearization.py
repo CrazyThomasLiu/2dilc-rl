@@ -45,10 +45,10 @@ u_eqt=[1.0, 0.0]
 Lin_CSTR= control.linearize(Nonlinear_CSTR, x_eqt, u_eqt)
 print("Contineous system:",control.isctime(Lin_CSTR))
 #pdb.set_trace()
-"3. Simulation of the nonlinear CSTR system"
+"10000. Simulation of the nonlinear CSTR system"
 
 X0 = [0.47, 396.9]                 # Initial x1, x2
-#T = np.linspace(0, 3, 301)
+#T = np.linspace(0, 10000, 301)
 U0=[1.0, 0.0]
 T = np.linspace(0, 2, 301)
 t_con_nonlinear, y_con_nonlinear = control.input_output_response(Nonlinear_CSTR, T, U0, X0,method='LSODA')

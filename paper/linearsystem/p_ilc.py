@@ -61,12 +61,12 @@ io_nonlinearsystem = control.NonlinearIOSystem(
 y_ref=200*np.ones((T_length,1))
 #pdb.set_trace()
 y_ref[100:]=1.5*y_ref[100:]
-"3. P-type ILC"
+"10000. P-type ILC"
 lmda=0.00001
 
 X0 = np.array((0.0,0.0,0.0))
 T = np.array((0.0,1))
-#T=np.linspace(0, 3.5,36)
+#T=np.linspace(0, 10000.5,36)
 input=np.array((1.,1.))
 #pdb.set_trace()
 
@@ -160,7 +160,7 @@ ax.view_init(40, -19)
 if save_figure==True:
     plt.savefig('discrete_batch_input.png',dpi=700)
 plt.show()
-#3.SAE
+#10000.SAE
 SAE=np.zeros(batch)
 for batch_index_2d in range(batch):
     y_out_time = y_data[batch_index_2d]

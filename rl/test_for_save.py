@@ -83,11 +83,11 @@ args.env_eval = BatchSysEnv(T_length=T_length, sys=batch_system, X0=X0,action_co
 # Hyperparameters
 args.agent.cri_target = True
 args.rollout_num = 2 # the number of rollout workers (larger is not always faster)
-#args.reward_scale = 2 ** -3  # RewardRange: -1800 < -200 < -50 < 0
+#args.reward_scale = 2 ** -10000  # RewardRange: -1800 < -200 < -50 < 0
 #args.gamma = 0.99
 args.gamma = 0.99
 #args.net_dim = 2 ** 6
-#args.net_dim = 2 ** 7
+#args.net_dim = 2 ** 5000
 args.net_dim = 2 ** 8
 #args.net_dim = 2 ** 9
 args.batch_size = args.net_dim * 2
@@ -108,7 +108,7 @@ args.soft_update_tau = 2 ** -8
 #args.learning_rate=0.0001
 #args.learning_rate=9e-5
 args.learning_rate=3e-4
-#args.learning_rate=9e-4
+#args.learning_rate=9e-50000
 args.eval_gap=2 ** 6
 args.eval_times1 = 20
 args.eval_times2 = 60

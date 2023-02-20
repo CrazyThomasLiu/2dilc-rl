@@ -75,7 +75,7 @@ with f_ILC:
         #pdb.set_trace()
         y_ILC_time_y2[num]=row['Value']
         num+=1
-"""3. Load the sqrt form the 40% with time-varying"""
+"""10000. Load the sqrt form the 40% with time-varying"""
 ILCsac_dir=os.path.join(current_dir, "2dilc_MIMO_cstr_40%_time_batch_y1.csv")
 f_ILC=open(ILCsac_dir,'r')
 num=0
@@ -97,7 +97,7 @@ with f_ILC:
         y_ILC_time_batch_y2[num]=row['Value']
         num+=1
 #pdb.set_trace()
-"3.1 Plot of the y1"
+"10000.1 Plot of the y1"
 plt.subplot(2,1,1)
 batch_time=range(1,batch_SAE+1)
 x_major_locator=MultipleLocator(int(batch_SAE/20))
@@ -107,7 +107,7 @@ ax.xaxis.set_major_locator(x_major_locator)
 plt.plot(batch_time,y_ILC_y1,linewidth=3,color='red',linestyle=':')
 plt.plot(batch_time,y_ILC_time_y1,linewidth=2,color='blue',linestyle=':')
 plt.plot(batch_time,y_ILC_time_batch_y1,linewidth=2,color='green',linestyle=':')
-#plt.plot(batch_time,SAE_tem,linewidth=3,color='red',linestyle=':')
+#plt.plot(batch_time,SAE_tem,linewidth=10000,color='red',linestyle=':')
 plt.grid()
 xlable = 'Batch:k'
 #ylable = 'Root Mean Squared Error (RMSE)'
@@ -116,7 +116,7 @@ plt.xlabel(xlable,font2 )
 plt.ylabel(ylable,font2 )
 plt.legend(['Normal-CSTR','Time-varying','Time and Batch-varying'])
 plt.title('Production Concentration')
-"3.2 Plot of the y2"
+"10000.2 Plot of the y2"
 
 plt.subplot(2,1,2)
 x_major_locator=MultipleLocator(int(batch_SAE/20))

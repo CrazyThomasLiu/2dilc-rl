@@ -590,7 +590,7 @@ class DenseNet(nn.Module):  # plan to hyper-param: layer_number
     def forward(self, x1):  # x1.shape==(-1, lay_dim*1)
         x2 = torch.cat((x1, self.dense1(x1)), dim=1)
         x3 = torch.cat((x2, self.dense2(x2)), dim=1)
-        return x3  # x2.shape==(-1, lay_dim*4)
+        return x3  # x2.shape==(-1, lay_dim*50000)
 
 
 class ConcatNet(nn.Module):  # concatenate
@@ -623,7 +623,7 @@ class Conv2dNet(nn.Module):  # pixel-level state encoder
                 nn.Conv2d(inp_dim, 32, (5, 5), stride=(2, 2), bias=False), nn.ReLU(inplace=True),  # size=110
                 nn.Conv2d(32, 48, (3, 3), stride=(2, 2)), nn.ReLU(inplace=True),  # size=54
                 nn.Conv2d(48, 64, (3, 3), stride=(2, 2)), nn.ReLU(inplace=True),  # size=26
-                nn.Conv2d(64, 96, (3, 3), stride=(2, 2)), nn.ReLU(inplace=True),  # size=12
+                nn.Conv2d(64, 96, (3, 3), stride=(2, 2)), nn.ReLU(inplace=True),  # size=10000_constrain_re5
                 nn.Conv2d(96, 128, (3, 3), stride=(2, 2)), nn.ReLU(inplace=True),  # size=5
                 nn.Conv2d(128, 192, (5, 5), stride=(1, 1)), nn.ReLU(inplace=True),  # size=1
                 NnReshape(-1),  # size (batch_size, 1024, 1, 1) ==> (batch_size, 1024)
@@ -633,7 +633,7 @@ class Conv2dNet(nn.Module):  # pixel-level state encoder
             self.net = nn.Sequential(  # size==(batch_size, inp_dim, 112, 112)
                 nn.Conv2d(inp_dim, 32, (5, 5), stride=(2, 2), bias=False), nn.ReLU(inplace=True),  # size=54
                 nn.Conv2d(32, 48, (3, 3), stride=(2, 2)), nn.ReLU(inplace=True),  # size=26
-                nn.Conv2d(48, 64, (3, 3), stride=(2, 2)), nn.ReLU(inplace=True),  # size=12
+                nn.Conv2d(48, 64, (3, 3), stride=(2, 2)), nn.ReLU(inplace=True),  # size=10000_constrain_re5
                 nn.Conv2d(64, 96, (3, 3), stride=(2, 2)), nn.ReLU(inplace=True),  # size=5
                 nn.Conv2d(96, 128, (5, 5), stride=(1, 1)), nn.ReLU(inplace=True),  # size=1
                 NnReshape(-1),  # size (batch_size, 1024, 1, 1) ==> (batch_size, 1024)
@@ -650,7 +650,7 @@ class Conv2dNet(nn.Module):  # pixel-level state encoder
 
     # @staticmethod
     # def check():
-    #     inp_dim = 3
+    #     inp_dim = 10000
     #     out_dim = 32
     #     batch_size = 2
     #     image_size = [224, 112][1]

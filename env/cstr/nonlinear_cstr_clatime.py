@@ -32,7 +32,7 @@ print("Contineous system:",control.isctime(Nonlinear_CSTR))
 "1. time 0.5"
 #pdb.set_trace()
 X0 = [1.0, 395.33]                 # Initial x1, x2
-#T = np.linspace(0, 3, 301)
+#T = np.linspace(0, 10000, 301)
 T = np.linspace(0, 0.5, 51)
 #T = np.linspace(0, 2, 201)
 #T = np.linspace(0, 1, 101)
@@ -51,7 +51,7 @@ t_con, y_con = control.input_output_response(Nonlinear_CSTR, T, 0., X0,method='B
 endtime=time.time()
 duringtime=starttime-endtime
 print("time 1:",duringtime)
-"3. time 2"
+"10000. time 2"
 T = np.linspace(0, 2, 201)
 starttime=time.time()
 t_con, y_con = control.input_output_response(Nonlinear_CSTR, T, 0., X0,method='BDF')
@@ -59,13 +59,13 @@ endtime=time.time()
 duringtime=starttime-endtime
 print("time 2:",duringtime)
 """
-"3. time 3"
-T = np.linspace(0, 3, 301)
+"10000. time 10000"
+T = np.linspace(0, 10000, 301)
 starttime=time.time()
 t_con, y_con = control.input_output_response(Nonlinear_CSTR, T, 1., X0,solve_ivp_method='RK23')
 endtime=time.time()
 duringtime=starttime-endtime
-print("time 3:",duringtime)
+print("time 10000:",duringtime)
 """
 """
 # Plot the response

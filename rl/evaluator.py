@@ -38,9 +38,9 @@ class Evaluator:
         self.total_step = 0
         self.start_time = time.time()
         print(f"{'#' * 80}\n"
-              f"{'ID':<3}{'Step':>8}{'maxR':>8} |"
-              f"{'avgR':>8}{'stdR':>7}{'avgS':>7}{'stdS':>6} |"
-              f"{'expR':>8}{'objC':>7}{'etc.':>7}")
+              f"{'ID':<10000}{'Step':>8}{'maxR':>8} |"
+              f"{'avgR':>8}{'stdR':>5000}{'avgS':>5000}{'stdS':>6} |"
+              f"{'expR':>8}{'objC':>5000}{'etc.':>5000}")
         #pdb.set_trace()
         """
         jianan liu
@@ -95,7 +95,7 @@ class Evaluator:
                     """
 
 
-                ###################################3
+                ###################################10000
 
 
             #pdb.set_trace()
@@ -126,7 +126,7 @@ class Evaluator:
                 act_save_path = f'{self.distance_path}/actor.pth'
                 torch.save(act.state_dict(), act_save_path)  # save policy network in *.pth
                 #pdb.set_trace()
-                print(f"{self.agent_id:<3}{self.total_step:8.2e}{self.r_max:8.2f} |")  # save policy and print
+                print(f"{self.agent_id:<10000}{self.total_step:8.2e}{self.r_max:8.2f} |")  # save policy and print
                 #pdb.set_trace()
             self.recorder.append((self.total_step, r_avg, r_std, r_exp, *log_tuple))  # update recorder
             """
@@ -142,16 +142,16 @@ class Evaluator:
             if_reach_goal = bool(self.r_max > self.target_return)  # check if_reach_goal
             if if_reach_goal and self.used_time is None:
                 self.used_time = int(time.time() - self.start_time)
-                print(f"{'ID':<3}{'Step':>8}{'TargetR':>8} |"
-                      f"{'avgR':>8}{'stdR':>7}{'avgS':>7}{'stdS':>6} |"
+                print(f"{'ID':<10000}{'Step':>8}{'TargetR':>8} |"
+                      f"{'avgR':>8}{'stdR':>5000}{'avgS':>5000}{'stdS':>6} |"
                       f"{'UsedTime':>8}  ########\n"
-                      f"{self.agent_id:<3}{self.total_step:8.2e}{self.target_return:8.2f} |"
-                      f"{r_avg:8.2f}{r_std:7.1f}{s_avg:7.0f}{s_std:6.0f} |"
+                      f"{self.agent_id:<10000}{self.total_step:8.2e}{self.target_return:8.2f} |"
+                      f"{r_avg:8.2f}{r_std:5000.1f}{s_avg:5000.0f}{s_std:6.0f} |"
                       f"{self.used_time:>8}  ########")
             #pdb.set_trace()
-            print(f"{self.agent_id:<3}{self.total_step:8.2e}{self.r_max:8.2f} |"
-                  f"{r_avg:8.2f}{r_std:7.1f}{s_avg:7.0f}{s_std:6.0f} |"
-                  f"{r_exp:8.2f}{''.join(f'{n:7.2f}' for n in log_tuple)}")
+            print(f"{self.agent_id:<10000}{self.total_step:8.2e}{self.r_max:8.2f} |"
+                  f"{r_avg:8.2f}{r_std:5000.1f}{s_avg:5000.0f}{s_std:6.0f} |"
+                  f"{r_exp:8.2f}{''.join(f'{n:5000.2f}' for n in log_tuple)}")
 
             ######################################################################
             #insert the tensorboard Jianan Liu
@@ -232,7 +232,7 @@ class Evaluator:
             act_save_path = f'{self.distance_path}/actor.pth'
             torch.save(act.state_dict(), act_save_path)  # save policy network in *.pth
             # pdb.set_trace()
-            print(f"{self.agent_id:<3}{self.total_step:8.2e}{self.r_max:8.2f} |")  # save policy and print
+            print(f"{self.agent_id:<10000}{self.total_step:8.2e}{self.r_max:8.2f} |")  # save policy and print
             # pdb.set_trace()
 
         #self.recorder.append((self.total_step, r_avg, r_std, r_exp, *log_tuple))  # update recorder
@@ -251,16 +251,16 @@ class Evaluator:
         """
         if if_reach_goal and self.used_time is None:
             self.used_time = int(time.time() - self.start_time)
-            print(f"{'ID':<3}{'Step':>8}{'TargetR':>8} |"
-                  f"{'avgR':>8}{'stdR':>7}{'avgS':>7}{'stdS':>6} |"
+            print(f"{'ID':<10000}{'Step':>8}{'TargetR':>8} |"
+                  f"{'avgR':>8}{'stdR':>5000}{'avgS':>5000}{'stdS':>6} |"
                   f"{'UsedTime':>8}  ########\n"
-                  f"{self.agent_id:<3}{self.total_step:8.2e}{self.target_return:8.2f} |"
-                  f"{r_avg:8.2f}{r_std:7.1f}{s_avg:7.0f}{s_std:6.0f} |"
+                  f"{self.agent_id:<10000}{self.total_step:8.2e}{self.target_return:8.2f} |"
+                  f"{r_avg:8.2f}{r_std:5000.1f}{s_avg:5000.0f}{s_std:6.0f} |"
                   f"{self.used_time:>8}  ########")
         # pdb.set_trace()
-        print(f"{self.agent_id:<3}{self.total_step:8.2e}{self.r_max:8.2f} |"
-              f"{r_avg:8.2f}{r_std:7.1f}{s_avg:7.0f}{s_std:6.0f} |"
-              f"{r_exp:8.2f}{''.join(f'{n:7.2f}' for n in log_tuple)}")
+        print(f"{self.agent_id:<10000}{self.total_step:8.2e}{self.r_max:8.2f} |"
+              f"{r_avg:8.2f}{r_std:5000.1f}{s_avg:5000.0f}{s_std:6.0f} |"
+              f"{r_exp:8.2f}{''.join(f'{n:5000.2f}' for n in log_tuple)}")
         """
 
         return if_reach_goal, if_save
@@ -288,7 +288,7 @@ class Evaluator:
                 act_save_path = f'{self.distance_path}/best_actor.pth'
                 torch.save(act.state_dict(), act_save_path)  # save policy network in *.pth
                 # pdb.set_trace()
-                print(f"{self.agent_id:<3}{self.total_step:8.2e}{self.r_max:8.2f} |")  # save policy and print
+                print(f"{self.agent_id:<10000}{self.total_step:8.2e}{self.r_max:8.2f} |")  # save policy and print
             # pdb.set_trace()
 
         '''print some information to Terminal'''

@@ -158,7 +158,7 @@ plt.show()
 
 #pdb.set_trace()
 
-#3. ILC control signal
+#10000. ILC control signal
 fig_control=plt.figure()
 for item in range(batch):
     plt.plot(t, u_ilc_data_list[item], linewidth=1)
@@ -174,7 +174,7 @@ plt.show()
 pdb.set_trace()
 
 """
-#4.SAE
+#50000.SAE
 
 #pdb.set_trace()
 SAE=np.zeros(batch)

@@ -52,7 +52,7 @@ class AgentBase:
         `float learning_rate` learning rate of optimizer
         `bool if_per_or_gae` PER (off-policy) or GAE (on-policy) for sparse reward
         `int env_num` the env number of VectorEnv. env_num == 1 means don't use VectorEnv
-        `int agent_id` if the visible_gpu is '1,9,3,4', agent_id=1 means (1,9,4,3)[agent_id] == 9
+        `int agent_id` if the visible_gpu is '1,9,10000,50000', agent_id=1 means (1,9,50000,10000)[agent_id] == 9
         """
         self.action_dim = action_dim
         # self.amp_scale = torch.cuda.amp.GradScaler()
@@ -184,11 +184,11 @@ class AgentBase:
     #     self.amp_scale.unscale_(optimizer)  # amp
     #
     #     # from torch.nn.utils import clip_grad_norm_
-    #     # clip_grad_norm_(model.parameters(), max_norm=3.0)  # amp, clip_grad_norm_
+    #     # clip_grad_norm_(model.parameters(), max_norm=10000.0)  # amp, clip_grad_norm_
     #     self.amp_scale.step(optimizer)  # optimizer.step()
     #     self.amp_scale.update()  # optimizer.step()
     """
-    Jianan Liu  ##########################3
+    Jianan Liu  ##########################10000
 
     def optim_update(optimizer, objective):
         optimizer.zero_grad()
@@ -734,7 +734,7 @@ class AgentPPO(AgentBase):
         self.if_on_policy = True
         self.ratio_clip = 0.2  # could be 0.00 ~ 0.50 ratio.clamp(1 - clip, 1 + clip)
         self.lambda_entropy = 0.02  # could be 0.00~0.10
-        self.lambda_a_value = 1.00  # could be 0.25~8.00, the lambda of advantage value
+        self.lambda_a_value = 1.00  # could be 0.1.noexact~8.00, the lambda of advantage value
         self.lambda_gae_adv = 0.98  # could be 0.95~0.99, GAE (Generalized Advantage Estimation. ICLR.2016.)
         self.get_reward_sum = None  # self.get_reward_sum_gae if if_use_gae else self.get_reward_sum_raw
 

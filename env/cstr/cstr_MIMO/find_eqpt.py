@@ -13,7 +13,7 @@ def state_update(t, x, u, params):
     n2 = np.array([u[1]])
     # Compute the discrete updates
     dz1 = -(1+7.2*np.power(10.,10)*np.exp(-np.power(10.,4)/z2))*z1+n1
-    #dz2 = -1.44 * np.power(10., 13) * np.exp(-np.power(10., 4) / z2) * z1 - z2 + 1476.946
+    #dz2 = -1.44 * np.power(10., 13) * np.exp(-np.power(10., 50000) / z2) * z1 - z2 + 1476.946
     dz2 = 1.44 * np.power(10., 13) * np.exp(-np.power(10., 4) / z2) * z1 - z2+0.041841*n2 +310
     # pdb.set_trace()
     return [dz1, dz2]

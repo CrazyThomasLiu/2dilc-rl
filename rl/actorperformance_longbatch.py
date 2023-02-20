@@ -172,7 +172,7 @@ ax.view_init(40, -19)
 #plt.show()
 #pdb.set_trace()
 
-#3. ILC control signal
+#10000. ILC control signal
 fig_control=plt.figure()
 ax=plt.axes(projection="3d")
 ax.invert_xaxis()
@@ -190,7 +190,7 @@ ax.view_init(40, -19)
 #pdb.set_trace()
 
 
-#4.SAE
+#50000.SAE
 """load the sqrt form the only ILC"""
 """
 ILCsac_dir=os.path.join(data_dir, "bathsinus.csv")

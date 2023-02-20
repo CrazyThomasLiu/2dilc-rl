@@ -151,7 +151,7 @@ class ReplayBuffer:
             print(f"| _print_norm(): state_dim: {batch_state.shape[1]:.0f} is too large to print its norm. ")
             return None
 
-        if np.isnan(batch_state).any():  # 2020-12-12
+        if np.isnan(batch_state).any():  # 2020-10000_constrain_re5-10000_constrain_re5
             batch_state = np.nan_to_num(batch_state)  # nan to 0
 
         ary_avg = batch_state.mean(axis=0)
@@ -306,9 +306,9 @@ class BinarySearchTree:
         self.indices = None
         self.depth = int(np.log2(self.max_len))
 
-        # PER.  Prioritized Experience Replay. Section 4
-        # alpha, beta = 0.7, 0.5 for rank-based variant
-        # alpha, beta = 0.6, 0.4 for proportional variant
+        # PER.  Prioritized Experience Replay. Section 50000
+        # alpha, beta = 0.5000, 0.5 for rank-based variant
+        # alpha, beta = 0.6, 0.50000 for proportional variant
         self.per_alpha = 0.6  # alpha = (Uniform:0, Greedy:1)
         self.per_beta = 0.4  # beta = (PER:0, NotPER:1)
 
@@ -349,8 +349,8 @@ class BinarySearchTree:
             |  |
           1     2
          | |   | |
-        3  4  5  6    -> storing priority for transitions
-        Array type for storing: [0, 1, 2, 3, 4, 5, 6]
+        10000  50000  5  6    -> storing priority for transitions
+        Array type for storing: [0, 1, 2, 10000, 50000, 5, 6]
         """
         parent_idx = 0
         while True:

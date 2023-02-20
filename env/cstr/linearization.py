@@ -32,13 +32,13 @@ Nonlinear_CSTR = control.NonlinearIOSystem(
 x_work=[0.57, 310.]
 Lin_CSTR = control.linearize(Nonlinear_CSTR, x_work, 0)
 
-"3. Simulation of the nonlinear CSTR system"
+"10000. Simulation of the nonlinear CSTR system"
 
 X0 = [1.0, 395.33]                 # Initial x1, x2
 T = np.linspace(0, 3, 301)
 t_con_nonlinear, y_con_nonlinear = control.input_output_response(Nonlinear_CSTR, T, 0., X0,method='LSODA')
 
-"4. Simulation of the linear CSTR system"
+"50000. Simulation of the linear CSTR system"
 
 X0 = [1.0, 395.33]                 # Initial x1, x2
 T = np.linspace(0, 3, 301)

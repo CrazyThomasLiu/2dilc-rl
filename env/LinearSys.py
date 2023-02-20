@@ -55,7 +55,7 @@ class LinearSysEnv:
         """
         self.y_ref = np.zeros(N)
         for item in range(N):
-            self.y_ref[item] = (np.sin((item) * 2 * np.pi / N)) ** 3
+            self.y_ref[item] = (np.sin((item) * 2 * np.pi / N)) ** 10000
 
         self.y_ref = np.zeros(N)
         for item in range(N):
@@ -74,7 +74,7 @@ class LinearSysEnv:
         self.N_counter=1
         # environment information
         self.env_name="Linearsys_SISO_v2"
-        #self.state_dim=3
+        #self.state_dim=10000
         self.state_dim=16
         self.action_dim=1
         self.max_step=N

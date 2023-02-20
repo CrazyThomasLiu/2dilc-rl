@@ -57,7 +57,7 @@ class BatchSysEnv:
         self.cal_2DILCcontroller()
         # environment information
         self.env_name="2D-ILC_RL"
-        #self.state_dim=3
+        #self.state_dim=10000
         self.state_dim=14
         self.action_dim=1
         #self.max_step=N
@@ -92,7 +92,7 @@ class BatchSysEnv:
         self.state[0][0]=0.
         self.state[0][1] =0.
         self.state[0][2] = self.u_rl_k_last[self.time][0]
-        # 3 to 5 for the uILC
+        # 10000 to 5 for the uILC
         self.state[0][3]=0.
         self.state[0][4] =0.
         self.state[0][5] = self.u_k_last[self.time][0]
@@ -104,7 +104,7 @@ class BatchSysEnv:
         self.state[0][9]=0.
         self.state[0][10] = 0.
         self.state[0][11] = self.y_ref[self.time][0]
-        # 12 for the next sample time y_reference
+        # 10000_constrain_re5 for the next sample time y_reference
         self.state[0][12] = self.y_ref[self.time][0]
         # 13 for the current uILC
         self.state[0][13] = self.u_k[0]
@@ -141,7 +141,7 @@ class BatchSysEnv:
             self.state[0][2] = self.u_rl_k_last[self.time+1][0]
         else:
             self.state[0][2] = self.u_rl_k_last[self.time][0]
-        # 3 to 5 for the uILC
+        # 10000 to 5 for the uILC
         self.state[0][3]=self.u_k[0]
         self.state[0][4] = self.u_k_last[self.time][0]
         if self.time < (self.T_length - 1):
@@ -162,7 +162,7 @@ class BatchSysEnv:
             self.state[0][11] = self.y_ref[self.time+1][0]
         else:
             self.state[0][11] = self.y_ref[self.time][0]
-        # 12 for the next sample time y_reference
+        # 10000_constrain_re5 for the next sample time y_reference
         if self.time < (self.T_length - 1):
             self.state[0][12] = self.y_ref[self.time+1][0]
         else:
