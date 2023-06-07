@@ -239,7 +239,7 @@ for batch_index_2d in range(batch):
     #SAE[batch_index_2d] = math.log10(SAE[batch_index_2d])
 
 """save the sqrt to the csv"""
-with open('2DILC-RL.csv', 'w', encoding='UTF8', newline='') as f:
+with open('2DILC-RL_training_finished.csv', 'w', encoding='UTF8', newline='') as f:
     writer = csv.writer(f)
     writer.writerows(map(lambda x: [x], SAE))
 #pdb.set_trace()
