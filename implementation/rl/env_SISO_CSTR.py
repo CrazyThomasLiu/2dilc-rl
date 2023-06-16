@@ -7,7 +7,6 @@ import control
 import copy
 import typing
 import pprint
-
 class BatchSysEnv:
     # 10000 re 60
     # 5000  re 40

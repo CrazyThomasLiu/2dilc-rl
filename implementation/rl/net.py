@@ -8,7 +8,6 @@ import torch.nn as nn
 
 '''Q Network'''
 
-
 class QNet(nn.Module):  # nn.Module is a standard PyTorch Network
     def __init__(self, mid_dim, state_dim, action_dim):
         super().__init__()

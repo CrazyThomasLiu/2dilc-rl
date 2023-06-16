@@ -15,7 +15,7 @@ r=1# No useful
 l=1
 T_length=200
 #T_length=20
-batch=20
+batch=50
 def state_update(t, x, u, params):
     # Parameter setup
     #pdb.set_trace()
