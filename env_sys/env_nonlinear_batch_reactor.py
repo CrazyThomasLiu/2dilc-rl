@@ -60,7 +60,7 @@ class BatchSysEnv:
         # give the first 2D ILC control signal
         self.cal_2DILCcontroller()
         # environment information
-        self.env_name="SISO_CSTR"
+        self.env_name="nonlinear_batch_reactor"
         #self.state_dim=10000
         self.state_dim=14
         self.action_dim=1

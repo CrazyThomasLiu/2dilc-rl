@@ -99,13 +99,14 @@ class Arguments:
             env_name = getattr(self.env, 'env_name', self.env)
             current_path = os.path.abspath(__file__)
             current_dir = os.path.dirname(current_path)
-            #current_dir = f'{current_dir}/runs_{agent_name}_{env_name}_nominal'
-            current_dir = f'{current_dir}/runs_{agent_name}_{env_name}'
+            current_dir = f'{current_dir}/runs_{agent_name}_{env_name}_nominal'
+            #current_dir = f'{current_dir}/runs_{agent_name}_{env_name}'
             number = 1
             self.cwd = os.path.join(current_dir, str(number))
             while os.path.exists(self.cwd):
                 number += 1
                 self.cwd = os.path.join(current_dir, str(number))
+            #pdb.set_trace()
             os.makedirs(self.cwd)
             #pdb.set_trace()
 

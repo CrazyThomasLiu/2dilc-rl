@@ -14,7 +14,6 @@ import pprint
 
 """[ElegantRL.2021.09.09](https://github.com/AI4Finance-LLC/ElegantRL)"""
 
-
 class AgentBase:
     def __init__(self):
         self.states = None

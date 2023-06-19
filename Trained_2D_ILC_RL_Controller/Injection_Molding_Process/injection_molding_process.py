@@ -314,7 +314,11 @@ rl_input_show=np.zeros(batch)
 for item in range(batch):
     rl_input_show[item]=rl_input[200*item+time_section]
 
-
+if save_csv== True:
+    with open('compensation_input_time150.csv', 'w', encoding='UTF8', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(['Compensation'])
+        writer.writerows(map(lambda x: [x],  rl_input_show))
 "3. Plot of time transaction"
 batch_time=range(1,batch+1)
 fig=plt.figure(figsize=(9.0,5.5))
