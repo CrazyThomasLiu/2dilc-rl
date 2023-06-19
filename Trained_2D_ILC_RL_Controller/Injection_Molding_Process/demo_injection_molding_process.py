@@ -1,12 +1,9 @@
 import sys
 import os
-config_path=os.path.split(os.path.abspath(__file__))[0]
-config_path=config_path.rsplit('/',2)[0]
-sys.path.append(config_path)
 import pdb
-from DRL_Compensator.net import ActorSAC
+from net import ActorSAC
 import control
-from env_sys.env_linear_injection_modeling import BatchSysEnv
+from env_linear_injection_modeling import BatchSysEnv
 from control.matlab import *  # MATLAB-like functions
 import torch
 import pprint
