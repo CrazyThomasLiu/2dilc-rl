@@ -1,7 +1,7 @@
 # 2dilc-rl: 2D Iterative Learning Control with Deep Reinforcement Learning Compensation for the Non-repetitive Batch Processes
 
 
-##Catalog
+## Catalog
 * env_sys: Two different batch environment--injection molding process and nonlinear batch reactor. 
 * ILC_Controller:  Solving the control law for the two-dimensional iterative learning controller.
 * DRL_Compensator: Training the two-dimensional DRL compensator.
@@ -27,7 +27,7 @@ python demo_practical_injection_molding_process.py or demo_nominal_nonlinear_bat
 The training usually takes 4 hours for the injection_molding_process and 6 hours for the nonlinear batch reactor.
 
 
-## Test for the control simulation 
+## Test for the control performance simulation 
 * Injection Molding Process
 
 ```
@@ -36,7 +36,7 @@ python demo_injection_molding_process.py
 ```
 <img src="Trained_2D_ILC_RL_Controller/Injection_Molding_Process/Injection_molding_output.pdf" width="800" height="223"/> 
 
-
+![Image text](https://github.com/CrazyThomasLiu/2dilc-rl/blob/master/Trained_2D_ILC_RL_Controller/Injection_Molding_Process/Injection_molding_output.pdf)
 
 
 ## Acknowledgement
