@@ -159,6 +159,7 @@ ax.legend(['$y_{k,t}^{r}$','$y_{k,t}$'])
 ax.view_init(31, -42)
 if save_figure==True:
     plt.savefig('Injection_molding_output.pdf')
+    plt.savefig('Injection_molding_output.jpg')
 
 
 
