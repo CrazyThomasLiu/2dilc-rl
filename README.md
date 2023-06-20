@@ -10,7 +10,7 @@
 ## Getting Started
 * Clone this repo: `git clone https://github.com/CrazyThomasLiu/2dilc-rl`
 * Create a python virtual environment and activate. `conda create -n 2dilc-rl python=3.8` and `conda activate 2dilc-rl`
-* Install dependenices. `cd 2dilc_rl`, `pip install -r requirement.txt` and `cd code; python setup.py develop`
+* Install dependenices. `cd 2dilc_rl`, `pip install -r requirement.txt` 
 
 ## Calculation of the 2D ICL controller
 Run the following command to obtain the control law of the 2D ILC Controller.
@@ -20,6 +20,7 @@ python controllaw_injection_molding_process.py or controllaw_nonlinear_batch_rea
 ```
 
 ## Training of the 2D DRL compensator
+Run the following command to train the 2D DRL Compensator.
 ```
 cd DRL_Compensator
 python demo_nominal_injection_molding_process.py or demo_nominal_nonlinear_batch_reactor.py 
