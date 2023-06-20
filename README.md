@@ -34,9 +34,17 @@ The training usually takes 4 hours for the injection_molding_process and 6 hours
 cd Trained_2D_ILC_RL_Controller/Injection_Molding_Process
 python demo_injection_molding_process.py
 ```
-<img src="./Trained_2D_ILC_RL_Controller/Injection_Molding_Process/Injection_molding_output.jpg" width="800" height="223"/> 
-
 ![image](https://github.com/CrazyThomasLiu/2dilc-rl/raw/master/Trained_2D_ILC_RL_Controller/Injection_Molding_Process/Injection_molding_output.jpg)
+
+
+* Nonlinear Batch Reactor
+
+```
+cd Trained_2D_ILC_RL_Controller/Nonlinear_Batch_Reactor
+python demo_nonlinear_batch_reactor.py
+```
+
+![image](https://github.com/CrazyThomasLiu/2dilc-rl/raw/master/Trained_2D_ILC_RL_Controller/Injection_Molding_Process/Nonlinear_batch_reactor_output.jpg)
 
 
 ## Acknowledgement
