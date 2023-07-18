@@ -1,4 +1,4 @@
-# 2dilc-rl: 2D Iterative Learning Control with Deep Reinforcement Learning Compensation for the Non-repetitive Batch Processes
+# 2dilc-rl: 2D_Iterative_Learning_Control_with_Deep_Reinforcement_Learning_Compensation_for_the_Non-repetitive_Uncertainty_Batch_Processes
 
 
 ## Catalog
