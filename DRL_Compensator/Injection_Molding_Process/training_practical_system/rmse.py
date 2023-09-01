@@ -26,10 +26,10 @@ with f_rl:
 
 "2. Plot of the sum RMSE"
 batch_time=range(1,batch_rmse+1)
-fig=plt.figure(figsize=(9.0,5.5))
+fig=plt.figure(figsize=(10,6.5))
 font2 = {'family': 'Arial',
          'weight': 'bold',
-         'size': 18,
+         'size': 22,
          }
 x_major_locator=MultipleLocator(int(batch_rmse/10))
 
@@ -40,8 +40,8 @@ xlable = 'Batch:$\mathit{k} $'
 ylable = 'RMSE:$\mathit{I_{k}}$'
 plt.xlabel(xlable,font2 )
 plt.ylabel(ylable,font2 )
-plt.xticks(fontsize=13)
-plt.yticks(fontsize=13)
+plt.xticks(fontsize=19)
+plt.yticks(fontsize=19)
 
 ax=plt.gca()
 ax.xaxis.set_major_locator(x_major_locator)

@@ -27,11 +27,11 @@ with f_ref:
 
 
 'draw the figure'
-fig=plt.figure(figsize=(9.0,5.5))
+fig=plt.figure(figsize=(10,6.5))
 plt.rcParams['figure.dpi']=200
 font2 = {'family': 'Arial',
          'weight': 'bold',
-         'size': 18,
+         'size': 22,
          }
 
 plt.plot((t/300),y_ref,linewidth=2,color='tab:orange',linestyle='solid')
@@ -40,8 +40,8 @@ xlable = 'Training Batch Number'
 ylable = 'Average Reward per Batch'
 plt.xlabel(xlable,font2)
 plt.ylabel(ylable,font2 )
-plt.xticks(fontsize=13)
-plt.yticks(fontsize=13)
+plt.xticks(fontsize=19)
+plt.yticks(fontsize=19)
 ax=plt.gca()
 labels=ax.get_xticklabels()+ax.get_yticklabels()
 [label.set_fontname('Arial') for label in labels]

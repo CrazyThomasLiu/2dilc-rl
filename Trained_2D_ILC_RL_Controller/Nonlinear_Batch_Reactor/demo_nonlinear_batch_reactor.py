@@ -248,29 +248,35 @@ y_2dilc_show=y_2dilc[0:batch_rmse]
 y_2dilc_rl_show=y_rl[0:batch_rmse]
 "2. Plot of the sum RMSE"
 batch_time=range(1,batch_rmse+1)
-fig=plt.figure(figsize=(7,5.5))
+fig=plt.figure(figsize=(9,6.5))
 x_major_locator=MultipleLocator(int(batch_rmse/10))
 ax=plt.gca()
 ax.xaxis.set_major_locator(x_major_locator)
-plt.plot(batch_time,y_2dilc_show,linewidth=1.5,color='tab:blue',linestyle = 'dashdot')
-plt.plot(batch_time,y_2dilc_rl_show,linewidth=1.5,color='tab:orange',linestyle='solid')
+plt.plot(batch_time,y_2dilc_show,linewidth=2,color='tab:blue',linestyle = 'dashdot')
+plt.plot(batch_time,y_2dilc_rl_show,linewidth=2,color='tab:orange',linestyle='solid')
 plt.grid()
 
 xlable = 'Batch:$\mathit{k} $'
 ylable = 'RMSE:$\mathit{I_{k}}$'
-font2 = {'family': 'Arial',
+font2_rmse = {'family': 'Arial',
          'weight': 'bold',
-         'size': 18,
+         'size': 22,
          }
-plt.xlabel(xlable,font2 )
-plt.ylabel(ylable,font2 )
-plt.legend(['2D Iterative Learning Control Scheme','2D ILC-RL Control Scheme'])
+font2_legend = {'family': 'Arial',
+         'weight': 'bold',
+         'size': 16,
+         }
+plt.xlabel(xlable,font2_rmse )
+plt.ylabel(ylable,font2_rmse )
+plt.xticks(fontsize=19)
+plt.yticks(fontsize=19)
+plt.legend(['2D Iterative Learning Controller','2D ILC-RL Control Scheme'],prop=font2_legend)
 if save_figure==True:
     plt.savefig('Nonlinear_batch_reactor_compare_rmse.pdf')
 
 plt.show()
 
-# Draw the 2D DRL compensation signal at t=150 for all batches.
+# Draw the 2D DRL compensation signal at t=1.5 for all batches.
 batch=50
 time_length=200
 length=15000
@@ -302,22 +308,22 @@ if save_csv== True:
         writer.writerows(map(lambda x: [x],  rl_input_show))
 "3. Plot of time transaction"
 batch_time=range(1,batch+1)
-fig=plt.figure(figsize=(9.0,5.5))
-font2 = {'family': 'Arial',
+fig=plt.figure(figsize=(10.0,6.5))
+font_time_transaction = {'family': 'Arial',
          'weight': 'bold',
-         'size': 18,
+         'size': 22,
          }
 x_major_locator=MultipleLocator(int(batch/10))
 
-plt.plot(batch_time,rl_input_show,linewidth=1.5,color='black',linestyle='solid')
+plt.plot(batch_time,rl_input_show,linewidth=2,color='black',linestyle='solid')
 plt.grid()
 # plot the sin function
 xlable = 'Batch:$\mathit{k} $'
-ylable = 'DRL Compensation Signal:$\mathit{u_{k,150}}$'
-plt.xlabel(xlable,font2 )
-plt.ylabel(ylable,font2 )
-plt.xticks(fontsize=13)
-plt.yticks(fontsize=13)
+ylable = 'DRL Compensation Signal:$\mathit{u_{k,1.5}}$'
+plt.xlabel(xlable,font_time_transaction )
+plt.ylabel(ylable,font_time_transaction )
+plt.xticks(fontsize=19)
+plt.yticks(fontsize=19)
 
 ax=plt.gca()
 ax.xaxis.set_major_locator(x_major_locator)
