@@ -7,6 +7,7 @@
 * DRL_Compensator: Training the two-dimensional DRL compensator.
 * Trained_2D_ILC_RL_Controller: the designed and trained 2D ILC-RL controller.
 * Supplementary_Material: Supplementary materials for the Journal.
+* comparison_method: The comparison control scheme: PI-based indirect-type ILC from paper 'PI based indirect-type iterative learning control for batch processes with time-varying uncertainties: A 2D FM model based approach' Journal of process control,2019
 ## Getting Started
 * Clone this repo: `git clone https://github.com/CrazyThomasLiu/2dilc-rl`
 * Create a python virtual environment and activate. `conda create -n 2dilc-rl python=3.8` and `conda activate 2dilc-rl`
