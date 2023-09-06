@@ -242,7 +242,16 @@ with f_rl:
         y_rl[num]=row['Value']
         num+=1
 
-
+"""3. Load the  rmse"""
+PI_dir=os.path.join(current_dir, "PI_ILC_RMSE_nonlinear_batch_reactor.csv")
+f_PI=open(PI_dir,'r')
+num=0
+rmse_pi=np.zeros(batch)
+with f_PI:
+    reader=csv.DictReader(f_PI)
+    for row in reader:
+        rmse_pi[num]=row['Value']
+        num+=1
 # reduce the length of the rmse
 y_2dilc_show=y_2dilc[0:batch_rmse]
 y_2dilc_rl_show=y_rl[0:batch_rmse]
@@ -252,6 +261,7 @@ fig=plt.figure(figsize=(9,6.5))
 x_major_locator=MultipleLocator(int(batch_rmse/10))
 ax=plt.gca()
 ax.xaxis.set_major_locator(x_major_locator)
+plt.plot(batch_time,rmse_pi,linewidth=1.5,color='tab:red',linestyle='dashed')
 plt.plot(batch_time,y_2dilc_show,linewidth=2,color='tab:blue',linestyle = 'dashdot')
 plt.plot(batch_time,y_2dilc_rl_show,linewidth=2,color='tab:orange',linestyle='solid')
 plt.grid()
@@ -270,7 +280,14 @@ plt.xlabel(xlable,font2_rmse )
 plt.ylabel(ylable,font2_rmse )
 plt.xticks(fontsize=19)
 plt.yticks(fontsize=19)
-plt.legend(['2D Iterative Learning Controller','2D ILC-RL Control Scheme'],prop=font2_legend)
+plt.legend(['PI-based Indirect ILC [JPC,2019]','2D Iterative Learning Controller','2D ILC-RL Control Scheme'],prop=font2_legend)
+# setting the frame lines
+bwith=1.5
+TK=plt.gca()
+TK.spines['bottom'].set_linewidth(bwith)
+TK.spines['top'].set_linewidth(bwith)
+TK.spines['left'].set_linewidth(bwith)
+TK.spines['right'].set_linewidth(bwith)
 if save_figure==True:
     plt.savefig('Nonlinear_batch_reactor_compare_rmse.pdf')
 
