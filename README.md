@@ -52,5 +52,12 @@ python demo_nonlinear_batch_reactor.py
 
 
 
+# Citation:
+The 2D Iterative Learning Control with Deep Reinforcement Learning Compensation for the Non-repetitive Uncertainty Batch Processes was published in the Journal of Process Control.
+
+
+```
+Liu J, Zhou Z, Hong W, et al. Two-dimensional iterative learning control with deep reinforcement learning compensation for the non-repetitive uncertain batch processes[J]. Journal of Process Control, 2023, 131: 103106.
+```
 
 
